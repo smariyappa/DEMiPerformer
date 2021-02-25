@@ -1,0 +1,1570 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessVAC" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="clr-namespace:DEMiLibrary;assembly=DEMiLibrary" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:p="http://schemas.microsoft.com/workflow/2012/07/xaml/activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_TransactionItem" Type="InArgument(ui:QueueItem)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="out_BusinessRuleException" Type="OutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="out_SystemException" Type="OutArgument(s:Exception)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>738,818</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActionVAC_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="21">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="20">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart sap2010:Annotation.AnnotationText="For each queue item, verify the account closure. Exceptions like warning can be accepted and processed. DEMi System error like runtime error, accountId cannot be closed are business rule exceptions should be logged for investigation.&#xA;&#xA;Pre-Condition: Queue item should contain AccountId&#xA;Post- Condition: Verifies account closure&#xA;" DisplayName="ActionVAC" sap:VirtualizedContainerService.HintSize="698,738" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="ui:Browser" Name="DEMiBrowser" />
+      <Variable x:TypeArguments="x:Boolean" Name="runtimeErrorElementExist" />
+    </Flowchart.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+        <av:Size x:Key="ShapeSize">60,75</av:Size>
+        <av:PointCollection x:Key="ConnectorLocation">300,77.7 300,126.4</av:PointCollection>
+        <x:Double x:Key="Width">684</x:Double>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Flowchart.StartNode>
+      <x:Reference>__ReferenceID7</x:Reference>
+    </Flowchart.StartNode>
+    <FlowStep x:Name="__ReferenceID5">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <av:Point x:Key="ShapeLocation">200,377.7</av:Point>
+          <av:Size x:Key="ShapeSize">200,51</av:Size>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" BrowserType="Chrome" DisplayName="Private: Attach Browser- DEMi" sap:VirtualizedContainerService.HintSize="800,3244" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="00046bc95d179b37ecb35d1ba36b9ab2" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;" UiBrowser="[DEMiBrowser]">
+        <ui:BrowserScope.Body>
+          <ActivityAction x:TypeArguments="x:Object">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="786,3098" sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:String" Name="accountID" />
+                <Variable x:TypeArguments="x:String" Name="elementVACTitle" />
+                <Variable x:TypeArguments="x:Boolean" Name="VACElementExists" />
+                <Variable x:TypeArguments="ui:UiElement" Name="VACUiElement" />
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <TryCatch DisplayName="Try Catch- Process VAC" sap:VirtualizedContainerService.HintSize="764,2975" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+                <TryCatch.Try>
+                  <Sequence DisplayName="Process VAC" sap:VirtualizedContainerService.HintSize="746,2746" sap2010:WorkflowViewState.IdRef="Sequence_24">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="x:Boolean" Name="SubmitElementExist" />
+                      <Variable x:TypeArguments="x:Boolean" Name="errorElementExist" />
+                      <Variable x:TypeArguments="x:Int32" Name="acceptWarnPickDelay" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign DisplayName="Assign- verify account closure element" sap:VirtualizedContainerService.HintSize="724,60" sap2010:WorkflowViewState.IdRef="Assign_18">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[elementVACTitle]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">["&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl tag='H1' id='usecaseTitle' aaname='Verify Account Closure'/&gt;"]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:UiElementExists DisplayName="Element Exists: Verify Account Closure" Exists="[VACElementExists]" sap:VirtualizedContainerService.HintSize="724,106" sap2010:WorkflowViewState.IdRef="UiElementExists_14">
+                      <ui:UiElementExists.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="dc43c75af073bddb1c497c50a1131354" Selector="[elementVACTitle]" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                      </ui:UiElementExists.Target>
+                    </ui:UiElementExists>
+                    <If Condition="[Not VACElementExists]" DisplayName="If- VAC title element exists" sap:VirtualizedContainerService.HintSize="724,1273" sap2010:WorkflowViewState.IdRef="If_15">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <If.Then>
+                        <Sequence DisplayName="First run only" sap:VirtualizedContainerService.HintSize="380,1125" sap2010:WorkflowViewState.IdRef="Sequence_26">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <d:DEMiChangeSolution sap:VirtualizedContainerService.HintSize="358,22" sap2010:WorkflowViewState.IdRef="DEMiChangeSolution_1" in_Solution="CORE" />
+                          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Into : VAC" EmptyField="False" sap:VirtualizedContainerService.HintSize="358,134" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="True" Text="VAC">
+                            <ui:TypeInto.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="86a18e3a756b1d86e0dc79631618195a" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl id='menuSelect' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
+                            </ui:TypeInto.Target>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:TypeInto>
+                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - 'BUTTON  MenuSearcherGo'" sap:VirtualizedContainerService.HintSize="358,106" sap2010:WorkflowViewState.IdRef="Click_27" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                            <ui:Click.CursorPosition>
+                              <ui:CursorPosition Position="Center">
+                                <ui:CursorPosition.OffsetX>
+                                  <InArgument x:TypeArguments="x:Int32" />
+                                </ui:CursorPosition.OffsetX>
+                                <ui:CursorPosition.OffsetY>
+                                  <InArgument x:TypeArguments="x:Int32" />
+                                </ui:CursorPosition.OffsetY>
+                              </ui:CursorPosition>
+                            </ui:Click.CursorPosition>
+                            <ui:Click.Target>
+                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="144b1aa7dde8478e7fdf6488163abb40" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl tag='BUTTON' id='menuSearcherGo' /&gt;" WaitForReady="COMPLETE" />
+                            </ui:Click.Target>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:Click>
+                          <Delay DisplayName="Delay- delay to load VAC Menu" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="358,22" sap2010:WorkflowViewState.IdRef="Delay_2" />
+                          <ui:RetryScope DisplayName="Retry Scope- Find VAC element " sap:VirtualizedContainerService.HintSize="358,557" sap2010:WorkflowViewState.IdRef="RetryScope_1" NumberOfRetries="5" RetryInterval="00:00:05">
+                            <ui:RetryScope.ActivityBody>
+                              <ActivityAction>
+                                <Sequence DisplayName="Action" sap:VirtualizedContainerService.HintSize="336,376" sap2010:WorkflowViewState.IdRef="Sequence_22">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <ui:WaitUiElementAppear DisplayName="Find Element: Verify Account closure" FoundElement="[VACUiElement]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_1" WaitActive="False" WaitVisible="True">
+                                    <ui:WaitUiElementAppear.Target>
+                                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="3901b4fa7181afcb4ed6bcaf892af5ea" Selector="[elementVACTitle]" TimeoutMS="5000" WaitForReady="COMPLETE" />
+                                    </ui:WaitUiElementAppear.Target>
+                                  </ui:WaitUiElementAppear>
+                                  <ui:UiElementExists DisplayName="Element Exists: Verify Account Closure" Exists="[VACElementExists]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
+                                    <ui:UiElementExists.Target>
+                                      <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[VACUiElement]" InformativeScreenshot="33d911cb585a5da1a05419350d1e6164" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                    </ui:UiElementExists.Target>
+                                  </ui:UiElementExists>
+                                </Sequence>
+                              </ActivityAction>
+                            </ui:RetryScope.ActivityBody>
+                            <ui:RetryScope.Condition>
+                              <ActivityFunc x:TypeArguments="x:Boolean">
+                                <p:IsTrue DisplayName="Is true" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="IsTrue_1" Input="[VACElementExists]" />
+                              </ActivityFunc>
+                            </ui:RetryScope.Condition>
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                          </ui:RetryScope>
+                        </Sequence>
+                      </If.Then>
+                    </If>
+                    <Assign DisplayName="Assign- AccountID" sap:VirtualizedContainerService.HintSize="724,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[accountID]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[in_TransactionItem.SpecificContent("AccountID").ToString]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <Flowchart DisplayName="VAC - Process the record if title exist" sap:VirtualizedContainerService.HintSize="724,872" sap2010:WorkflowViewState.IdRef="Flowchart_2">
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+                          <av:Size x:Key="ShapeSize">60,75</av:Size>
+                          <av:PointCollection x:Key="ConnectorLocation">300,77.7 300,116.4</av:PointCollection>
+                          <x:Double x:Key="Width">710</x:Double>
+                          <x:Double x:Key="Height">835.5</x:Double>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <Flowchart.StartNode>
+                        <x:Reference>__ReferenceID4</x:Reference>
+                      </Flowchart.StartNode>
+                      <FlowDecision x:Name="__ReferenceID4" Condition="[VACElementExists]" DisplayName="VAC title exist?" sap:VirtualizedContainerService.HintSize="82,87" sap2010:WorkflowViewState.IdRef="FlowDecision_3">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <av:Point x:Key="ShapeLocation">258.4,116.4</av:Point>
+                            <av:Size x:Key="ShapeSize">82,87</av:Size>
+                            <av:PointCollection x:Key="FalseConnector">340.4,159.9 470,159.9 470,233.8</av:PointCollection>
+                            <av:PointCollection x:Key="TrueConnector">258.4,160 120,160 120,233.8</av:PointCollection>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <FlowDecision.True>
+                          <FlowStep x:Name="__ReferenceID1">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <av:Point x:Key="ShapeLocation">20,233.8</av:Point>
+                                <av:Size x:Key="ShapeSize">200,51</av:Size>
+                                <av:PointCollection x:Key="ConnectorLocation">120,284.8 120,356.5</av:PointCollection>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Sequence DisplayName="Action verify account closure" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Sequence_43">
+                              <Sequence.Variables>
+                                <Variable x:TypeArguments="ui:UiElement" Name="AccountIdDescUiElement" />
+                                <Variable x:TypeArguments="x:Boolean" Name="AccountIdDescElementExist" />
+                                <Variable x:TypeArguments="x:Int32" Name="accountIdDescPickDelay" />
+                                <Variable x:TypeArguments="x:Int32" Name="errorOrSubmitPickDelay" />
+                              </Sequence.Variables>
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into - A/C. ID" EmptyField="False" sap:VirtualizedContainerService.HintSize="1698,134" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="True" Text="[accountID]">
+                                <ui:TypeInto.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ca3893921c61d0dfb630d70da6bdd4d5" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_acctId' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
+                                </ui:TypeInto.Target>
+                              </ui:TypeInto>
+                              <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Hotkey- Hit enter key after Acc ID type into" EmptyField="False" sap:VirtualizedContainerService.HintSize="1698,116" sap2010:WorkflowViewState.IdRef="SendHotkey_2" Key="enter" KeyModifiers="None" SendWindowMessages="False" SpecialKey="True">
+                                <ui:SendHotkey.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
+                                </ui:SendHotkey.Target>
+                              </ui:SendHotkey>
+                              <Assign DisplayName="Assign- AccountID description pick delay" sap:VirtualizedContainerService.HintSize="1698,60" sap2010:WorkflowViewState.IdRef="Assign_27">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:Int32">[accountIdDescPickDelay]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <Pick DisplayName="Pick- Account Id Description" sap:VirtualizedContainerService.HintSize="1698,51" sap2010:WorkflowViewState.IdRef="Pick_5">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="365.6,577.2" sap2010:WorkflowViewState.IdRef="PickBranch_10">
+                                  <PickBranch.Trigger>
+                                    <Delay DisplayName="Delay- 00:00:07" Duration="00:00:07" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_8" />
+                                  </PickBranch.Trigger>
+                                  <Sequence DisplayName="VAC desc element does not exist" sap:VirtualizedContainerService.HintSize="336,317.2" sap2010:WorkflowViewState.IdRef="Sequence_38">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:LogMessage DisplayName="Log Message- cannot find Account ID description" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Warn" Message="[&quot;Cannot find the Account ID description Element.&quot;]" />
+                                    <Assign DisplayName="Assign- System Exce" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_25">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find Account ID description element: "+AccountIdDescUiElement.ToString )]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
+                                </PickBranch>
+                                <PickBranch DisplayName="PickBranch- Account Id Description element exist" sap:VirtualizedContainerService.HintSize="343.6,577.2" sap2010:WorkflowViewState.IdRef="PickBranch_11">
+                                  <PickBranch.Trigger>
+                                    <ui:UiElementExists DisplayName="Element Exists- AccountId description" Exists="[AccountIdDescElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_18">
+                                      <ui:UiElementExists.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="445fc0c3ca2698a1ba427e04f7265fe4" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_acctId_desc' tag='P' /&gt;" TimeoutMS="[accountIdDescPickDelay]" WaitForReady="COMPLETE" />
+                                      </ui:UiElementExists.Target>
+                                    </ui:UiElementExists>
+                                  </PickBranch.Trigger>
+                                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Go button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_28" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                    <ui:Click.CursorPosition>
+                                      <ui:CursorPosition Position="Center">
+                                        <ui:CursorPosition.OffsetX>
+                                          <InArgument x:TypeArguments="x:Int32" />
+                                        </ui:CursorPosition.OffsetX>
+                                        <ui:CursorPosition.OffsetY>
+                                          <InArgument x:TypeArguments="x:Int32" />
+                                        </ui:CursorPosition.OffsetY>
+                                      </ui:CursorPosition>
+                                    </ui:Click.CursorPosition>
+                                    <ui:Click.Target>
+                                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5a8ef9d22b6d1e2f12cd1028651a9059" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_btnGo' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                    </ui:Click.Target>
+                                  </ui:Click>
+                                </PickBranch>
+                              </Pick>
+                              <Assign DisplayName="Assign- ErrorOrSubmitPickDelay" sap:VirtualizedContainerService.HintSize="1698,60" sap2010:WorkflowViewState.IdRef="Assign_38">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="x:Int32">[errorOrSubmitPickDelay]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="x:Int32">10000</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <Pick DisplayName="Pick- Error (Runtime OR account closure) OR Submit" sap:VirtualizedContainerService.HintSize="1698,1103" sap2010:WorkflowViewState.IdRef="Pick_9">
+                                <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="366,1057" sap2010:WorkflowViewState.IdRef="PickBranch_19">
+                                  <PickBranch.Trigger>
+                                    <Delay DisplayName="Delay- 00:00:07" Duration="00:00:07" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_12" />
+                                  </PickBranch.Trigger>
+                                  <Sequence DisplayName="System error" sap:VirtualizedContainerService.HintSize="336,315" sap2010:WorkflowViewState.IdRef="Sequence_61">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:LogMessage DisplayName="Log Message- Cannot find the VAC Error/Submit element" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_21" Level="Info" Message="[&quot;Cannot find Submit element.&quot;]" />
+                                    <Assign DisplayName="Assign- System Excep, No submit button" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_40">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="ui:BusinessRuleException">[new BusinessRuleException("Cannot find the VAC Submit button element OR Closure error.")]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
+                                </PickBranch>
+                                <PickBranch DisplayName="PickBranch- Runtime error" sap:VirtualizedContainerService.HintSize="366,1057" sap2010:WorkflowViewState.IdRef="PickBranch_20">
+                                  <PickBranch.Trigger>
+                                    <ui:UiElementExists DisplayName="Element Exists: Runtime error" Exists="[runtimeErrorElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_27">
+                                      <ui:UiElementExists.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1472e705884dc816cc6d09dcf498f61d" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='finErrorPopup' tag='DIV' parentclass='claro' /&gt;" TimeoutMS="[errorOrSubmitPickDelay]" WaitForReady="COMPLETE" />
+                                      </ui:UiElementExists.Target>
+                                    </ui:UiElementExists>
+                                  </PickBranch.Trigger>
+                                  <Sequence DisplayName="Close error pop-up" sap:VirtualizedContainerService.HintSize="336,476" sap2010:WorkflowViewState.IdRef="Sequence_59">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - close error pop-up " sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_42" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="0d96503bce179501353322bd4575775e" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl tag='SPAN' class='dijitDialogCloseIcon' parentid='finErrorPopup' /&gt;" WaitForReady="COMPLETE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Cancel button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_43" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="944ce634535ca8640f5c2617b103a3c1" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_cancel' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                    <Assign DisplayName="Assign- Businessrule exception(run time error)" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_39">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="ui:BusinessRuleException">[new BusinessRuleException("DEMi System Error: A runtime error occured.")]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                  </Sequence>
+                                </PickBranch>
+                                <PickBranch DisplayName="PickBranch- Account closure error" sap:VirtualizedContainerService.HintSize="366,1057" sap2010:WorkflowViewState.IdRef="PickBranch_21">
+                                  <PickBranch.Trigger>
+                                    <ui:UiElementExists DisplayName="Element Exists : account closure error" Exists="[errorElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_28">
+                                      <ui:UiElementExists.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="0ecfe2159cdd7b91330c31479e4bae24" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='errorPanel' parentid='errorPane_Cat' tag='DIV' /&gt;&lt;webctrl id='errorHeading' tag='DIV' class='error-panel-title' /&gt;" TimeoutMS="[errorOrSubmitPickDelay]" WaitForReady="COMPLETE" />
+                                      </ui:UiElementExists.Target>
+                                    </ui:UiElementExists>
+                                  </PickBranch.Trigger>
+                                  <Sequence DisplayName="Close the error pop-up and click Cancel" sap:VirtualizedContainerService.HintSize="336,753" sap2010:WorkflowViewState.IdRef="Sequence_62">
+                                    <Sequence.Variables>
+                                      <Variable x:TypeArguments="x:String" Name="errorMessage" />
+                                    </Sequence.Variables>
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:GetValue ContinueOnError="{x:Null}" DisplayName="Get Text- VAC processing error message" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="GetValue_1">
+                                      <ui:GetValue.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="a7eda5aff26d11f885984daa6610d918" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='errorItem_0' parentid='errorlistUL' tag='LI' /&gt;" WaitForReady="INTERACTIVE" />
+                                      </ui:GetValue.Target>
+                                      <ui:GetValue.Value>
+                                        <OutArgument x:TypeArguments="x:String">[errorMessage]</OutArgument>
+                                      </ui:GetValue.Value>
+                                    </ui:GetValue>
+                                    <ui:LogMessage DisplayName="Log Message- random error during PIRPSC process" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_24" Level="Error" Message="[&quot;VAC Error : &quot;+errorMessage+&quot;. Email transaction team.&quot;]" />
+                                    <Assign DisplayName="Assign- Error pop-up : Business rule exception" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_42">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Error popup: "+errorMessage)]</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click : error image to close the error pop-up" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_47" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2ee5a97ccf28d68f22d90e8346bd88b8" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='UseCaseToolbar_error' class='cursorPointer' tag='LI' /&gt;" WaitForReady="COMPLETE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Cancel button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_45" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eba1603e28187b1cb193786ee196d9ed" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_cancel' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                  </Sequence>
+                                </PickBranch>
+                                <PickBranch DisplayName="PickBranch- Click Submit" sap:VirtualizedContainerService.HintSize="366,1057" sap2010:WorkflowViewState.IdRef="PickBranch_22">
+                                  <PickBranch.Trigger>
+                                    <ui:ImageFound DisplayName="Image Exists - Closure Submit element" Found="[SubmitElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="ImageFound_3">
+                                      <ui:ImageFound.Image>
+                                        <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAE0AAAAlCAYAAAAHrmSHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALoSURBVGhD7Zq/S3JRGMfv3n/Q1hI0tYQgNDS05GhE6BJJSEEEToGLgZvoYOhmOTVY0tBQkFIogg3+oDINBycdbGsJI+J5+T5w73uv3fclz9tyeZ/hg/fe55xzz/ncc54Tt6t9fn7S+/s7DYdD6na71Ol0hL8AR9rHxwe9vr7S8/OzbSHhK9poNKKXlxfboGAPSxsMBrZBwR7t7e2N+v2+bVCwR6QpINIUEGkKiDQFRJoCIk0BkaaASFNApCnwo9Jubm7I6/XS1NQUzc7OUiKRoMfHR2o2m7S+vk4nJyeW8rFYjPb29oxjTdMMlpeX6fz8nGPVapUWFxdpZ2eHWq2WpY1CoUDz8/NcH+e4B+51e3vLdcxt6iCOPpnbmYQfk1av12l1dZWSySQ9PT3x+fb2Nh0fH39bmn6M+plMhlZWVuju7s6Q5nK5qFQqWdqIRqMsYlyaWcrl5SV5PB5uR7/2L/yYNHQIHUMHzdcbjcbE0oC5PRxDIDg8PDTK1Go1bndhYcGZ0u7v72lzc5MCgQCVy2VLbFJp7Xabjo6OaG1tjWesLhDLfWtri++Fcrlcju8ZDAadKQ2go5FIhHMMnj4GjqX2XWnmvDM9Pc2zCjlRl5bP58nv99PFxQWLRV3cA7+OlaaDAV1dXdHS0hKlUqmJZxpALvP5fFxfl4bBQ+TBwQHPZuRQ/DpWGpbM+M6mi8B1LKF0Om2JY/ChUMhS1hzXr5mlFYtFlhKPx2l/f9+YcY6UhieOHIQZhoHoMwW7G+KYMZh519fXHD89PeXd8OzsjOPj0pDLNjY2uL5ZGh4Ays3NzfFyRVnHSgOYBfrfaTMzMxQOh43OIzchkSPfIWe53W7KZrMsEHEMejyn7e7uWjYCDB5lsQHomwTOHS3tf0GkKSDSFBBpCog0BUSaAiJNAZGmgEhTQKQpINIUMD61Gn9DIfwZ46M+vNp5eHiwLST8Bo6Mz0d7vR6/NahUKvzPC+ErcFOv1+kXn3oU5MWJRQYAAAAASUVORK5CYII=" />
+                                      </ui:ImageFound.Image>
+                                      <ui:ImageFound.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                      </ui:ImageFound.Target>
+                                    </ui:ImageFound>
+                                  </PickBranch.Trigger>
+                                  <Sequence DisplayName="Click Submit" sap:VirtualizedContainerService.HintSize="336,361" sap2010:WorkflowViewState.IdRef="Sequence_63">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_23" Level="Info" Message="[&quot;Closure Submit&quot;]" />
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Submit button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_46" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="36873c86a7a1e8a87024cbce6da3a501" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_submit' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                  </Sequence>
+                                </PickBranch>
+                              </Pick>
+                            </Sequence>
+                            <FlowStep.Next>
+                              <FlowDecision x:Name="__ReferenceID2" Condition="[SubmitElementExist]" DisplayName="Submit element exists?" sap:VirtualizedContainerService.HintSize="126,87" sap2010:WorkflowViewState.IdRef="FlowDecision_5">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <av:Point x:Key="ShapeLocation">57,356.5</av:Point>
+                                    <av:Size x:Key="ShapeSize">126,87</av:Size>
+                                    <av:PointCollection x:Key="TrueConnector">57,400 27,400 27,530 150,530</av:PointCollection>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <FlowDecision.True>
+                                  <FlowStep x:Name="__ReferenceID3">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <av:Point x:Key="ShapeLocation">150,504.5</av:Point>
+                                        <av:Size x:Key="ShapeSize">200,51</av:Size>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <Sequence DisplayName="Accept warning and click repeat" sap:VirtualizedContainerService.HintSize="886,1411" sap2010:WorkflowViewState.IdRef="Sequence_65">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <Assign DisplayName="Assign-Delay  Accept warning/ Successful message element" sap:VirtualizedContainerService.HintSize="864,60" sap2010:WorkflowViewState.IdRef="Assign_43">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:Int32">[acceptWarnPickDelay]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:Int32">7000</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <Pick DisplayName="Pick- VAC Accept warning element" sap:VirtualizedContainerService.HintSize="864,482" sap2010:WorkflowViewState.IdRef="Pick_10">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="344,436" sap2010:WorkflowViewState.IdRef="PickBranch_23">
+                                          <PickBranch.Trigger>
+                                            <Delay DisplayName="Delay- 00:00:05" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_13" />
+                                          </PickBranch.Trigger>
+                                          <ui:LogMessage DisplayName="Log Message- No Accept warning" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_25" Level="Info" Message="[&quot;No Accept warning&quot;]" />
+                                        </PickBranch>
+                                        <PickBranch DisplayName="PickBranch- VAC Accept warning" sap:VirtualizedContainerService.HintSize="344,436" sap2010:WorkflowViewState.IdRef="PickBranch_24">
+                                          <PickBranch.Trigger>
+                                            <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists: Accept button " sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="UiElementExists_29">
+                                              <ui:UiElementExists.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Submit' tag='BUTTON' parentid='finExcpSecGrp_footerPane_rightFooterCellSubmit' /&gt;" TimeoutMS="[acceptWarnPickDelay]" WaitForReady="COMPLETE" />
+                                              </ui:UiElementExists.Target>
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:UiElementExists>
+                                          </PickBranch.Trigger>
+                                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="Click Accept button in Warning and exception window is of input type SendWindowMessage. Please do not change the input type, it is not stable. We get &quot;System exception.Click generic error&quot;." ClickType="CLICK_SINGLE" DisplayName="Click- Warning and exception Accept button" sap:VirtualizedContainerService.HintSize="314,178" sap2010:WorkflowViewState.IdRef="Click_48" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="True" SimulateClick="False">
+                                            <ui:Click.CursorPosition>
+                                              <ui:CursorPosition Position="Center">
+                                                <ui:CursorPosition.OffsetX>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetX>
+                                                <ui:CursorPosition.OffsetY>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetY>
+                                              </ui:CursorPosition>
+                                            </ui:Click.CursorPosition>
+                                            <ui:Click.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="faaf4e56c145bf1f199c0747c35c4dce" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Submit' tag='BUTTON' parentid='finExcpSecGrp_footerPane_rightFooterCellSubmit' /&gt;" WaitForReady="COMPLETE" />
+                                            </ui:Click.Target>
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                          </ui:Click>
+                                        </PickBranch>
+                                      </Pick>
+                                      <Pick DisplayName="Pick- Successful message" sap:VirtualizedContainerService.HintSize="864,665" sap2010:WorkflowViewState.IdRef="Pick_11">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="344,619" sap2010:WorkflowViewState.IdRef="PickBranch_25">
+                                          <PickBranch.Trigger>
+                                            <Delay DisplayName="Delay- 00:00:05" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_14" />
+                                          </PickBranch.Trigger>
+                                          <ui:LogMessage DisplayName="Log Message- Cannot find success message Ui element." sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_26" Level="Info" Message="[&quot;No Successful message element.&quot;]" />
+                                        </PickBranch>
+                                        <PickBranch DisplayName="PickBranch- Successful message" sap:VirtualizedContainerService.HintSize="366,619" sap2010:WorkflowViewState.IdRef="PickBranch_26">
+                                          <PickBranch.Trigger>
+                                            <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists : account closure verified successfully" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="UiElementExists_30">
+                                              <ui:UiElementExists.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2070b361c50dbf6da2ec5378fa7ba89c" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_resMessage_finMessage' tag='DIV' /&gt;" TimeoutMS="[acceptWarnPickDelay]" WaitForReady="COMPLETE" />
+                                              </ui:UiElementExists.Target>
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:UiElementExists>
+                                          </PickBranch.Trigger>
+                                          <Sequence DisplayName="Successfully verified VAC" sap:VirtualizedContainerService.HintSize="336,361" sap2010:WorkflowViewState.IdRef="Sequence_64">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Repeat Task" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_49" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                              <ui:Click.CursorPosition>
+                                                <ui:CursorPosition Position="Center">
+                                                  <ui:CursorPosition.OffsetX>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetX>
+                                                  <ui:CursorPosition.OffsetY>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetY>
+                                                </ui:CursorPosition>
+                                              </ui:Click.CursorPosition>
+                                              <ui:Click.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c541f8282fb72175d8f4a8a873b734ea" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_btnRepeat1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                                              </ui:Click.Target>
+                                            </ui:Click>
+                                            <ui:LogMessage DisplayName="Log Message- Transaction success" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_27" Level="Info" Message="[&quot;Transaction success: &quot; +in_TransactionItem.SpecificContent(&quot;RefNo&quot;).ToString]" />
+                                          </Sequence>
+                                        </PickBranch>
+                                      </Pick>
+                                    </Sequence>
+                                  </FlowStep>
+                                </FlowDecision.True>
+                              </FlowDecision>
+                            </FlowStep.Next>
+                          </FlowStep>
+                        </FlowDecision.True>
+                        <FlowDecision.False>
+                          <FlowStep x:Name="__ReferenceID0">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <av:Point x:Key="ShapeLocation">370,233.8</av:Point>
+                                <av:Size x:Key="ShapeSize">200,51</av:Size>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Sequence DisplayName="VAC title element does not exist" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="Sequence_37">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Warn" Message="[&quot;Cannot find the Verify Account Closure title Element.&quot;]" />
+                              <Assign DisplayName="Assign- System Exce" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_24">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find VAC title element: "+ elementVACTitle )]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                            </Sequence>
+                          </FlowStep>
+                        </FlowDecision.False>
+                      </FlowDecision>
+                      <x:Reference>__ReferenceID0</x:Reference>
+                      <x:Reference>__ReferenceID1</x:Reference>
+                      <FlowStep>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <av:Point x:Key="ShapeLocation">420,784.5</av:Point>
+                            <av:Size x:Key="ShapeSize">200,51</av:Size>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ui:BrowserScope SearchScope="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" Browser="[DEMiBrowser]" BrowserType="Chrome" DisplayName="Attach Browser- check account closure error/action VAC" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="BrowserScope_4" InformativeScreenshot="7e77115c81614a35a7da249f8a7759b3">
+                          <ui:BrowserScope.Body>
+                            <ActivityAction x:TypeArguments="x:Object">
+                              <ActivityAction.Argument>
+                                <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+                              </ActivityAction.Argument>
+                              <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="1033,1964" sap2010:WorkflowViewState.IdRef="Sequence_57">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="x:Int32" Name="closureErrorSubmitElementDelay" />
+                                </Sequence.Variables>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Assign DisplayName="Assign- Closure error / submit element delay" sap:VirtualizedContainerService.HintSize="1011,60" sap2010:WorkflowViewState.IdRef="Assign_28">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Int32">[closureErrorSubmitElementDelay]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Int32">7000</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <Pick DisplayName="Pick- Account closure error/ Submit" sap:VirtualizedContainerService.HintSize="1011,51" sap2010:WorkflowViewState.IdRef="Pick_6">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="366,1137" sap2010:WorkflowViewState.IdRef="PickBranch_12">
+                                    <PickBranch.Trigger>
+                                      <Delay DisplayName="Delay- 00:00:05" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_9" />
+                                    </PickBranch.Trigger>
+                                    <Sequence DisplayName="System error" sap:VirtualizedContainerService.HintSize="336,315" sap2010:WorkflowViewState.IdRef="Sequence_44">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message- cannot find the VAC Error/Submit element" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Info" Message="[&quot;Cannot find Closure error OR Submit element.&quot;]" />
+                                      <Assign DisplayName="Assign- System Excep, No submit button" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_29">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find the VAC Submit button element OR Closure error.")]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                    </Sequence>
+                                  </PickBranch>
+                                  <PickBranch DisplayName="PickBranch- Closure error element exist" sap:VirtualizedContainerService.HintSize="366,1137" sap2010:WorkflowViewState.IdRef="PickBranch_13">
+                                    <PickBranch.Trigger>
+                                      <ui:UiElementExists DisplayName="Element Exists : account closure error" Exists="[errorElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_20">
+                                        <ui:UiElementExists.Target>
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="0ecfe2159cdd7b91330c31479e4bae24" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='UseCaseToolbar_error' class='cursorPointer' tag='LI' /&gt;" TimeoutMS="[closureErrorSubmitElementDelay]" WaitForReady="COMPLETE" />
+                                        </ui:UiElementExists.Target>
+                                      </ui:UiElementExists>
+                                    </PickBranch.Trigger>
+                                    <Sequence DisplayName="Close the error pop-up and click Cancel" sap:VirtualizedContainerService.HintSize="336,607" sap2010:WorkflowViewState.IdRef="Sequence_45">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;Closure Error&quot;]" />
+                                      <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click : error image to close the error pop-up" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_30" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                        <ui:Click.CursorPosition>
+                                          <ui:CursorPosition Position="Center">
+                                            <ui:CursorPosition.OffsetX>
+                                              <InArgument x:TypeArguments="x:Int32" />
+                                            </ui:CursorPosition.OffsetX>
+                                            <ui:CursorPosition.OffsetY>
+                                              <InArgument x:TypeArguments="x:Int32" />
+                                            </ui:CursorPosition.OffsetY>
+                                          </ui:CursorPosition>
+                                        </ui:Click.CursorPosition>
+                                        <ui:Click.Target>
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9431a3cf26a835d290fe3f2bdb517225" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='UseCaseToolbar_error' class='cursorPointer' tag='LI' /&gt;" WaitForReady="COMPLETE" />
+                                        </ui:Click.Target>
+                                      </ui:Click>
+                                      <Assign DisplayName="Assign-  DEMI internal Exception" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_30">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="ui:BusinessRuleException">[new BusinessRuleException("DEMI System internal Error: Cannot close AccoutId")]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Cancel button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_31" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                        <ui:Click.CursorPosition>
+                                          <ui:CursorPosition Position="Center">
+                                            <ui:CursorPosition.OffsetX>
+                                              <InArgument x:TypeArguments="x:Int32" />
+                                            </ui:CursorPosition.OffsetX>
+                                            <ui:CursorPosition.OffsetY>
+                                              <InArgument x:TypeArguments="x:Int32" />
+                                            </ui:CursorPosition.OffsetY>
+                                          </ui:CursorPosition>
+                                        </ui:Click.CursorPosition>
+                                        <ui:Click.Target>
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eba1603e28187b1cb193786ee196d9ed" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_cancel' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                        </ui:Click.Target>
+                                      </ui:Click>
+                                    </Sequence>
+                                  </PickBranch>
+                                  <PickBranch DisplayName="PickBranch- Closure Submit element exist" sap:VirtualizedContainerService.HintSize="468,1137" sap2010:WorkflowViewState.IdRef="PickBranch_14">
+                                    <PickBranch.Trigger>
+                                      <Sequence sap:VirtualizedContainerService.HintSize="438,578" sap2010:WorkflowViewState.IdRef="Sequence_47">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:ImageFound Found="{x:Null}" DisplayName="Image Exists - Closure Submit element" sap:VirtualizedContainerService.HintSize="416,106" sap2010:WorkflowViewState.IdRef="ImageFound_2">
+                                          <ui:ImageFound.Image>
+                                            <ui:ImageTarget Image="{x:Null}" Accuracy="0.8" TargetImageBase64="iVBORw0KGgoAAAANSUhEUgAAAE0AAAAlCAYAAAAHrmSHAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALoSURBVGhD7Zq/S3JRGMfv3n/Q1hI0tYQgNDS05GhE6BJJSEEEToGLgZvoYOhmOTVY0tBQkFIogg3+oDINBycdbGsJI+J5+T5w73uv3fclz9tyeZ/hg/fe55xzz/ncc54Tt6t9fn7S+/s7DYdD6na71Ol0hL8AR9rHxwe9vr7S8/OzbSHhK9poNKKXlxfboGAPSxsMBrZBwR7t7e2N+v2+bVCwR6QpINIUEGkKiDQFRJoCIk0BkaaASFNApCnwo9Jubm7I6/XS1NQUzc7OUiKRoMfHR2o2m7S+vk4nJyeW8rFYjPb29oxjTdMMlpeX6fz8nGPVapUWFxdpZ2eHWq2WpY1CoUDz8/NcH+e4B+51e3vLdcxt6iCOPpnbmYQfk1av12l1dZWSySQ9PT3x+fb2Nh0fH39bmn6M+plMhlZWVuju7s6Q5nK5qFQqWdqIRqMsYlyaWcrl5SV5PB5uR7/2L/yYNHQIHUMHzdcbjcbE0oC5PRxDIDg8PDTK1Go1bndhYcGZ0u7v72lzc5MCgQCVy2VLbFJp7Xabjo6OaG1tjWesLhDLfWtri++Fcrlcju8ZDAadKQ2go5FIhHMMnj4GjqX2XWnmvDM9Pc2zCjlRl5bP58nv99PFxQWLRV3cA7+OlaaDAV1dXdHS0hKlUqmJZxpALvP5fFxfl4bBQ+TBwQHPZuRQ/DpWGpbM+M6mi8B1LKF0Om2JY/ChUMhS1hzXr5mlFYtFlhKPx2l/f9+YcY6UhieOHIQZhoHoMwW7G+KYMZh519fXHD89PeXd8OzsjOPj0pDLNjY2uL5ZGh4Ays3NzfFyRVnHSgOYBfrfaTMzMxQOh43OIzchkSPfIWe53W7KZrMsEHEMejyn7e7uWjYCDB5lsQHomwTOHS3tf0GkKSDSFBBpCog0BUSaAiJNAZGmgEhTQKQpINIUMD61Gn9DIfwZ46M+vNp5eHiwLST8Bo6Mz0d7vR6/NahUKvzPC+ErcFOv1+kXn3oU5MWJRQYAAAAASUVORK5CYII=" />
+                                          </ui:ImageFound.Image>
+                                          <ui:ImageFound.Target>
+                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                          </ui:ImageFound.Target>
+                                        </ui:ImageFound>
+                                        <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="416,308" sap2010:WorkflowViewState.IdRef="CommentOut_7">
+                                          <ui:CommentOut.Body>
+                                            <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="336,230" sap2010:WorkflowViewState.IdRef="Sequence_46">
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                              <ui:UiElementExists DisplayName="Element Exists- Submit button" Exists="[SubmitElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_21">
+                                                <ui:UiElementExists.Target>
+                                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2bbddb18764097f7c6c3a4a88ed1081f" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_submit' tag='BUTTON' /&gt;" TimeoutMS="[closureErrorSubmitElementDelay]" WaitForReady="COMPLETE" />
+                                                </ui:UiElementExists.Target>
+                                              </ui:UiElementExists>
+                                            </Sequence>
+                                          </ui:CommentOut.Body>
+                                          <sap:WorkflowViewStateService.ViewState>
+                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                            </scg:Dictionary>
+                                          </sap:WorkflowViewStateService.ViewState>
+                                        </ui:CommentOut>
+                                      </Sequence>
+                                    </PickBranch.Trigger>
+                                    <Sequence DisplayName="Click Submit" sap:VirtualizedContainerService.HintSize="336,361" sap2010:WorkflowViewState.IdRef="Sequence_48">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="[&quot;Closure Submit&quot;]" />
+                                      <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Submit button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_32" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                        <ui:Click.CursorPosition>
+                                          <ui:CursorPosition Position="Center">
+                                            <ui:CursorPosition.OffsetX>
+                                              <InArgument x:TypeArguments="x:Int32" />
+                                            </ui:CursorPosition.OffsetX>
+                                            <ui:CursorPosition.OffsetY>
+                                              <InArgument x:TypeArguments="x:Int32" />
+                                            </ui:CursorPosition.OffsetY>
+                                          </ui:CursorPosition>
+                                        </ui:Click.CursorPosition>
+                                        <ui:Click.Target>
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="36873c86a7a1e8a87024cbce6da3a501" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_submit' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                        </ui:Click.Target>
+                                      </ui:Click>
+                                    </Sequence>
+                                  </PickBranch>
+                                </Pick>
+                                <If Condition="[SubmitElementExist]" DisplayName="If- Submit element exist" sap:VirtualizedContainerService.HintSize="1011,1558" sap2010:WorkflowViewState.IdRef="If_20">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <If.Then>
+                                    <Sequence DisplayName="Accept warning and click repeat" sap:VirtualizedContainerService.HintSize="886,1411" sap2010:WorkflowViewState.IdRef="Sequence_50">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <Assign DisplayName="Assign-Delay  Accept warning/ Successful message element" sap:VirtualizedContainerService.HintSize="864,60" sap2010:WorkflowViewState.IdRef="Assign_31">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:Int32">[acceptWarnPickDelay]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:Int32">7000</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <Pick DisplayName="Pick- VAC Accept warning element" sap:VirtualizedContainerService.HintSize="864,482" sap2010:WorkflowViewState.IdRef="Pick_7">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="344,436" sap2010:WorkflowViewState.IdRef="PickBranch_15">
+                                          <PickBranch.Trigger>
+                                            <Delay DisplayName="Delay- 00:00:05" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_10" />
+                                          </PickBranch.Trigger>
+                                          <ui:LogMessage DisplayName="Log Message- No Accept warning" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_17" Level="Info" Message="[&quot;No Accept warning&quot;]" />
+                                        </PickBranch>
+                                        <PickBranch DisplayName="PickBranch- VAC Accept warning" sap:VirtualizedContainerService.HintSize="344,436" sap2010:WorkflowViewState.IdRef="PickBranch_16">
+                                          <PickBranch.Trigger>
+                                            <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists: Accept button " sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="UiElementExists_22">
+                                              <ui:UiElementExists.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Submit' tag='BUTTON' parentid='finExcpSecGrp_footerPane_rightFooterCellSubmit' /&gt;" TimeoutMS="[delayAcceptWarnSuccessMsgElement]" WaitForReady="COMPLETE" />
+                                              </ui:UiElementExists.Target>
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:UiElementExists>
+                                          </PickBranch.Trigger>
+                                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="Click Accept button in Warning and exception window is of input type SendWindowMessage. Please do not change the input type, it is not stable. We get &quot;System exception.Click generic error&quot;." ClickType="CLICK_SINGLE" DisplayName="Click- Warning and exception Accept button" sap:VirtualizedContainerService.HintSize="314,178" sap2010:WorkflowViewState.IdRef="Click_33" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="True" SimulateClick="False">
+                                            <ui:Click.CursorPosition>
+                                              <ui:CursorPosition Position="Center">
+                                                <ui:CursorPosition.OffsetX>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetX>
+                                                <ui:CursorPosition.OffsetY>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetY>
+                                              </ui:CursorPosition>
+                                            </ui:Click.CursorPosition>
+                                            <ui:Click.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="faaf4e56c145bf1f199c0747c35c4dce" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Submit' tag='BUTTON' parentid='finExcpSecGrp_footerPane_rightFooterCellSubmit' /&gt;" WaitForReady="COMPLETE" />
+                                            </ui:Click.Target>
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                          </ui:Click>
+                                        </PickBranch>
+                                      </Pick>
+                                      <Pick DisplayName="Pick- Successful message" sap:VirtualizedContainerService.HintSize="864,665" sap2010:WorkflowViewState.IdRef="Pick_8">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="344,619" sap2010:WorkflowViewState.IdRef="PickBranch_17">
+                                          <PickBranch.Trigger>
+                                            <Delay DisplayName="Delay- 00:00:05" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_11" />
+                                          </PickBranch.Trigger>
+                                          <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_18" Level="Info" Message="[&quot;No Successful message element.&quot;]" />
+                                        </PickBranch>
+                                        <PickBranch DisplayName="PickBranch- Successful message" sap:VirtualizedContainerService.HintSize="366,619" sap2010:WorkflowViewState.IdRef="PickBranch_18">
+                                          <PickBranch.Trigger>
+                                            <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists : account closure verified successfully" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="UiElementExists_23">
+                                              <ui:UiElementExists.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2070b361c50dbf6da2ec5378fa7ba89c" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_resMessage_finMessage' tag='DIV' /&gt;" TimeoutMS="[delayAcceptWarnSuccessMsgElement]" WaitForReady="COMPLETE" />
+                                              </ui:UiElementExists.Target>
+                                              <sap:WorkflowViewStateService.ViewState>
+                                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                </scg:Dictionary>
+                                              </sap:WorkflowViewStateService.ViewState>
+                                            </ui:UiElementExists>
+                                          </PickBranch.Trigger>
+                                          <Sequence DisplayName="Successfully verified VAC" sap:VirtualizedContainerService.HintSize="336,361" sap2010:WorkflowViewState.IdRef="Sequence_49">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Repeat Task" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_34" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                              <ui:Click.CursorPosition>
+                                                <ui:CursorPosition Position="Center">
+                                                  <ui:CursorPosition.OffsetX>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetX>
+                                                  <ui:CursorPosition.OffsetY>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetY>
+                                                </ui:CursorPosition>
+                                              </ui:Click.CursorPosition>
+                                              <ui:Click.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c541f8282fb72175d8f4a8a873b734ea" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_btnRepeat1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                                              </ui:Click.Target>
+                                            </ui:Click>
+                                            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_19" Level="Info" Message="[&quot;Transaction success: &quot; +in_TransactionItem.SpecificContent(&quot;RefNo&quot;).ToString]" />
+                                          </Sequence>
+                                        </PickBranch>
+                                      </Pick>
+                                    </Sequence>
+                                  </If.Then>
+                                </If>
+                                <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="1011,51" sap2010:WorkflowViewState.IdRef="CommentOut_8">
+                                  <ui:CommentOut.Body>
+                                    <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="1297,175" sap2010:WorkflowViewState.IdRef="Sequence_56">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <If Condition="[errorElementExist]" DisplayName="If- " sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="If_24">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <Sequence DisplayName="Close the error pop-up and click Cancel" sap:VirtualizedContainerService.HintSize="336,476" sap2010:WorkflowViewState.IdRef="Sequence_51">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click : error image to close the error pop-up" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_35" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                              <ui:Click.CursorPosition>
+                                                <ui:CursorPosition Position="Center">
+                                                  <ui:CursorPosition.OffsetX>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetX>
+                                                  <ui:CursorPosition.OffsetY>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetY>
+                                                </ui:CursorPosition>
+                                              </ui:Click.CursorPosition>
+                                              <ui:Click.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="31c7c01495e682b74d0a2ce78f0158dd" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='UseCaseToolbar_error' class='cursorPointer' tag='LI' /&gt;" WaitForReady="COMPLETE" />
+                                              </ui:Click.Target>
+                                            </ui:Click>
+                                            <Assign DisplayName="Assign-  DEMI internal Exception" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_32">
+                                              <Assign.To>
+                                                <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                                              </Assign.To>
+                                              <Assign.Value>
+                                                <InArgument x:TypeArguments="ui:BusinessRuleException">[new BusinessRuleException("DEMI System internal Error: Cannot close AccoutId")]</InArgument>
+                                              </Assign.Value>
+                                            </Assign>
+                                            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Cancel button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_36" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                              <ui:Click.CursorPosition>
+                                                <ui:CursorPosition Position="Center">
+                                                  <ui:CursorPosition.OffsetX>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetX>
+                                                  <ui:CursorPosition.OffsetY>
+                                                    <InArgument x:TypeArguments="x:Int32" />
+                                                  </ui:CursorPosition.OffsetY>
+                                                </ui:CursorPosition>
+                                              </ui:Click.CursorPosition>
+                                              <ui:Click.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="eba1603e28187b1cb193786ee196d9ed" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_cancel' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                                              </ui:Click.Target>
+                                            </ui:Click>
+                                          </Sequence>
+                                        </If.Then>
+                                        <If.Else>
+                                          <Sequence DisplayName="Continue VAC" sap:VirtualizedContainerService.HintSize="914,2285" sap2010:WorkflowViewState.IdRef="Sequence_55">
+                                            <Sequence.Variables>
+                                              <Variable x:TypeArguments="x:String" Name="btnAcceptSelector" />
+                                              <Variable x:TypeArguments="x:Boolean" Name="btnAcceptElementExist" />
+                                              <Variable x:TypeArguments="x:String" Name="successfulMsgSelector" />
+                                              <Variable x:TypeArguments="x:Boolean" Name="successfulMsgElementExist" />
+                                              <Variable x:TypeArguments="ui:UiElement" Name="SubmitUiElement" />
+                                            </Sequence.Variables>
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:WaitUiElementAppear DisplayName="Find Element- Submit button" FoundElement="[SubmitUiElement]" sap:VirtualizedContainerService.HintSize="892,106" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_6" WaitActive="True" WaitVisible="True">
+                                              <ui:WaitUiElementAppear.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e0ee085869af5e3b900631d190bb2fa6" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_submit' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                                              </ui:WaitUiElementAppear.Target>
+                                            </ui:WaitUiElementAppear>
+                                            <ui:UiElementExists DisplayName="Element Exists- Submit button" Exists="[SubmitElementExist]" sap:VirtualizedContainerService.HintSize="892,68" sap2010:WorkflowViewState.IdRef="UiElementExists_24">
+                                              <ui:UiElementExists.Target>
+                                                <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[SubmitUiElement]" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+                                              </ui:UiElementExists.Target>
+                                            </ui:UiElementExists>
+                                            <If Condition="[SubmitElementExist]" DisplayName="If- VAC submit" sap:VirtualizedContainerService.HintSize="892,1907" sap2010:WorkflowViewState.IdRef="If_23">
+                                              <If.Then>
+                                                <Sequence DisplayName="VAC Submit" sap:VirtualizedContainerService.HintSize="625,1759" sap2010:WorkflowViewState.IdRef="Sequence_54">
+                                                  <Sequence.Variables>
+                                                    <Variable x:TypeArguments="ui:UiElement" Name="successMsgUiElement" />
+                                                  </Sequence.Variables>
+                                                  <sap:WorkflowViewStateService.ViewState>
+                                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                    </scg:Dictionary>
+                                                  </sap:WorkflowViewStateService.ViewState>
+                                                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Submit button" sap:VirtualizedContainerService.HintSize="603,106" sap2010:WorkflowViewState.IdRef="Click_37" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                                    <ui:Click.CursorPosition>
+                                                      <ui:CursorPosition Position="Center">
+                                                        <ui:CursorPosition.OffsetX>
+                                                          <InArgument x:TypeArguments="x:Int32" />
+                                                        </ui:CursorPosition.OffsetX>
+                                                        <ui:CursorPosition.OffsetY>
+                                                          <InArgument x:TypeArguments="x:Int32" />
+                                                        </ui:CursorPosition.OffsetY>
+                                                      </ui:CursorPosition>
+                                                    </ui:Click.CursorPosition>
+                                                    <ui:Click.Target>
+                                                      <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" Element="[SubmitUiElement]" InformativeScreenshot="699d4d567864af94caab3fc639451cd0" WaitForReady="COMPLETE" />
+                                                    </ui:Click.Target>
+                                                  </ui:Click>
+                                                  <Assign DisplayName="Assign: warning &amp; exception Accept selector" sap:VirtualizedContainerService.HintSize="603,60" sap2010:WorkflowViewState.IdRef="Assign_33">
+                                                    <Assign.To>
+                                                      <OutArgument x:TypeArguments="x:String">[btnAcceptSelector]</OutArgument>
+                                                    </Assign.To>
+                                                    <Assign.Value>
+                                                      <InArgument x:TypeArguments="x:String">["&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Submit' tag='BUTTON' parentid='finExcpSecGrp_footerPane_rightFooterCellSubmit' /&gt;"]</InArgument>
+                                                    </Assign.Value>
+                                                  </Assign>
+                                                  <ui:UiElementExists DisplayName="Element Exists: Accept button " Exists="[btnAcceptElementExist]" sap:VirtualizedContainerService.HintSize="603,51" sap2010:WorkflowViewState.IdRef="UiElementExists_25">
+                                                    <ui:UiElementExists.Target>
+                                                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="[btnAcceptSelector]" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                                    </ui:UiElementExists.Target>
+                                                    <sap:WorkflowViewStateService.ViewState>
+                                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                      </scg:Dictionary>
+                                                    </sap:WorkflowViewStateService.ViewState>
+                                                  </ui:UiElementExists>
+                                                  <If Condition="[btnAcceptElementExist]" DisplayName="If- Warning Accept button exists" sap:VirtualizedContainerService.HintSize="603,450" sap2010:WorkflowViewState.IdRef="If_21">
+                                                    <sap:WorkflowViewStateService.ViewState>
+                                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                      </scg:Dictionary>
+                                                    </sap:WorkflowViewStateService.ViewState>
+                                                    <If.Then>
+                                                      <Sequence sap:VirtualizedContainerService.HintSize="336,302" sap2010:WorkflowViewState.IdRef="Sequence_52">
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="Click Accept button in Warning and exception window is of input type SendWindowMessage. Please do not change the input type, it is not stable. We get &quot;System exception.Click generic error&quot;." ClickType="CLICK_SINGLE" DisplayName="Click- Warning and exception Accept button" sap:VirtualizedContainerService.HintSize="314,178" sap2010:WorkflowViewState.IdRef="Click_38" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="True" SimulateClick="False">
+                                                          <ui:Click.CursorPosition>
+                                                            <ui:CursorPosition Position="Center">
+                                                              <ui:CursorPosition.OffsetX>
+                                                                <InArgument x:TypeArguments="x:Int32" />
+                                                              </ui:CursorPosition.OffsetX>
+                                                              <ui:CursorPosition.OffsetY>
+                                                                <InArgument x:TypeArguments="x:Int32" />
+                                                              </ui:CursorPosition.OffsetY>
+                                                            </ui:CursorPosition>
+                                                          </ui:Click.CursorPosition>
+                                                          <ui:Click.Target>
+                                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="faaf4e56c145bf1f199c0747c35c4dce" Selector="[btnAcceptSelector]" WaitForReady="COMPLETE" />
+                                                          </ui:Click.Target>
+                                                          <sap:WorkflowViewStateService.ViewState>
+                                                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                                            </scg:Dictionary>
+                                                          </sap:WorkflowViewStateService.ViewState>
+                                                        </ui:Click>
+                                                      </Sequence>
+                                                    </If.Then>
+                                                  </If>
+                                                  <Assign DisplayName="Assign: VAC verified successfully selector" sap:VirtualizedContainerService.HintSize="603,60" sap2010:WorkflowViewState.IdRef="Assign_34">
+                                                    <Assign.To>
+                                                      <OutArgument x:TypeArguments="x:String">[successfulMsgSelector]</OutArgument>
+                                                    </Assign.To>
+                                                    <Assign.Value>
+                                                      <InArgument x:TypeArguments="x:String">["&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_resMessage_finMessage' tag='DIV' /&gt;"]</InArgument>
+                                                    </Assign.Value>
+                                                  </Assign>
+                                                  <ui:WaitUiElementAppear DisplayName="Find Element- account closure successful message" FoundElement="[successMsgUiElement]" sap:VirtualizedContainerService.HintSize="603,68" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_7" WaitActive="False" WaitVisible="False">
+                                                    <ui:WaitUiElementAppear.Target>
+                                                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" Selector="[successfulMsgSelector]" WaitForReady="INTERACTIVE" />
+                                                    </ui:WaitUiElementAppear.Target>
+                                                  </ui:WaitUiElementAppear>
+                                                  <ui:UiElementExists DisplayName="Element Exists : account closure verified successfully" Exists="[successfulMsgElementExist]" sap:VirtualizedContainerService.HintSize="603,51" sap2010:WorkflowViewState.IdRef="UiElementExists_26">
+                                                    <ui:UiElementExists.Target>
+                                                      <ui:Target ClippingRegion="{x:Null}" Selector="{x:Null}" Element="[successMsgUiElement]" InformativeScreenshot="2070b361c50dbf6da2ec5378fa7ba89c" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                                    </ui:UiElementExists.Target>
+                                                    <sap:WorkflowViewStateService.ViewState>
+                                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                      </scg:Dictionary>
+                                                    </sap:WorkflowViewStateService.ViewState>
+                                                  </ui:UiElementExists>
+                                                  <If Condition="[successfulMsgElementExist]" DisplayName="If- check success element exist" sap:VirtualizedContainerService.HintSize="603,509" sap2010:WorkflowViewState.IdRef="If_22">
+                                                    <sap:WorkflowViewStateService.ViewState>
+                                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                                      </scg:Dictionary>
+                                                    </sap:WorkflowViewStateService.ViewState>
+                                                    <If.Then>
+                                                      <Sequence DisplayName="Successfully verified VAC" sap:VirtualizedContainerService.HintSize="336,361" sap2010:WorkflowViewState.IdRef="Sequence_53">
+                                                        <sap:WorkflowViewStateService.ViewState>
+                                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                          </scg:Dictionary>
+                                                        </sap:WorkflowViewStateService.ViewState>
+                                                        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Repeat Task" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_39" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                                          <ui:Click.CursorPosition>
+                                                            <ui:CursorPosition Position="Center">
+                                                              <ui:CursorPosition.OffsetX>
+                                                                <InArgument x:TypeArguments="x:Int32" />
+                                                              </ui:CursorPosition.OffsetX>
+                                                              <ui:CursorPosition.OffsetY>
+                                                                <InArgument x:TypeArguments="x:Int32" />
+                                                              </ui:CursorPosition.OffsetY>
+                                                            </ui:CursorPosition>
+                                                          </ui:Click.CursorPosition>
+                                                          <ui:Click.Target>
+                                                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c541f8282fb72175d8f4a8a873b734ea" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_btnRepeat1' tag='BUTTON' /&gt;" WaitForReady="INTERACTIVE" />
+                                                          </ui:Click.Target>
+                                                        </ui:Click>
+                                                        <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_20" Level="Info" Message="[&quot;Transaction success: &quot; +in_TransactionItem.SpecificContent(&quot;RefNo&quot;).ToString]" />
+                                                      </Sequence>
+                                                    </If.Then>
+                                                    <If.Else>
+                                                      <Assign DisplayName="Assign- System Execp (No successful message element)" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_35">
+                                                        <Assign.To>
+                                                          <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                                        </Assign.To>
+                                                        <Assign.Value>
+                                                          <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find VAC successful message element: "+successfulMsgSelector )]</InArgument>
+                                                        </Assign.Value>
+                                                      </Assign>
+                                                    </If.Else>
+                                                  </If>
+                                                </Sequence>
+                                              </If.Then>
+                                              <If.Else>
+                                                <Assign DisplayName="Assign- System Excep, No submit button" sap:VirtualizedContainerService.HintSize="242,60" sap2010:WorkflowViewState.IdRef="Assign_36">
+                                                  <Assign.To>
+                                                    <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                                  </Assign.To>
+                                                  <Assign.Value>
+                                                    <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find the VAC Submit element: "+ SubmitUiElement.ToString)]</InArgument>
+                                                  </Assign.Value>
+                                                </Assign>
+                                              </If.Else>
+                                            </If>
+                                          </Sequence>
+                                        </If.Else>
+                                      </If>
+                                    </Sequence>
+                                  </ui:CommentOut.Body>
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                </ui:CommentOut>
+                              </Sequence>
+                            </ActivityAction>
+                          </ui:BrowserScope.Body>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:BrowserScope>
+                      </FlowStep>
+                      <x:Reference>__ReferenceID2</x:Reference>
+                      <x:Reference>__ReferenceID3</x:Reference>
+                    </Flowchart>
+                    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="724,51" sap2010:WorkflowViewState.IdRef="CommentOut_9">
+                      <ui:CommentOut.Body>
+                        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="222,176" sap2010:WorkflowViewState.IdRef="Sequence_60">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <If Condition="[VACElementExists]" DisplayName="If- VAC title exist" sap:VirtualizedContainerService.HintSize="200,52.4" sap2010:WorkflowViewState.IdRef="If_4">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <If.Then>
+                              <Sequence DisplayName="Action verify account closure" sap:VirtualizedContainerService.HintSize="885.2,1574" sap2010:WorkflowViewState.IdRef="Sequence_7">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="ui:UiElement" Name="AccountIdDescUiElement" />
+                                  <Variable x:TypeArguments="x:Boolean" Name="AccountIdDescElementExist" />
+                                </Sequence.Variables>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <WriteLine DisplayName="Write Line" sap:VirtualizedContainerService.HintSize="863.2,62.4" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[&quot;AccountId: &quot; + accountID]" />
+                                <Delay DisplayName="Delay- 00:00:03" Duration="00:00:03" sap:VirtualizedContainerService.HintSize="863.2,22" sap2010:WorkflowViewState.IdRef="Delay_1" />
+                                <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into - A/C. ID" EmptyField="False" sap:VirtualizedContainerService.HintSize="863.2,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[accountID]">
+                                  <ui:TypeInto.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ca3893921c61d0dfb630d70da6bdd4d5" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_acctId' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
+                                  </ui:TypeInto.Target>
+                                </ui:TypeInto>
+                                <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Hotkey- Hit enter key after Acc ID type into" EmptyField="False" sap:VirtualizedContainerService.HintSize="863.2,117.6" sap2010:WorkflowViewState.IdRef="SendHotkey_1" Key="enter" KeyModifiers="None" SendWindowMessages="False" SpecialKey="True">
+                                  <ui:SendHotkey.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
+                                  </ui:SendHotkey.Target>
+                                </ui:SendHotkey>
+                                <Pick DisplayName="Pick- Account Id Description" sap:VirtualizedContainerService.HintSize="863.2,623.2" sap2010:WorkflowViewState.IdRef="Pick_1">
+                                  <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="365.6,577.2" sap2010:WorkflowViewState.IdRef="PickBranch_1">
+                                    <PickBranch.Trigger>
+                                      <Delay DisplayName="Delay- 00:00:07" Duration="00:00:07" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_3" />
+                                    </PickBranch.Trigger>
+                                    <Sequence DisplayName="VAC desc element does not exist" sap:VirtualizedContainerService.HintSize="336,317.2" sap2010:WorkflowViewState.IdRef="Sequence_27">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Warn" Message="[&quot;Cannot find the Account ID description Element.&quot;]" />
+                                      <Assign DisplayName="Assign- System Exce" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_19">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find Account ID description element: "+AccountIdDescUiElement.ToString )]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                    </Sequence>
+                                  </PickBranch>
+                                  <PickBranch DisplayName="PickBranch- Account Id Description element exist" sap:VirtualizedContainerService.HintSize="343.6,577.2" sap2010:WorkflowViewState.IdRef="PickBranch_2">
+                                    <PickBranch.Trigger>
+                                      <ui:UiElementExists DisplayName="Element Exists- AccountId description" Exists="[AccountIdDescElementExist]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_13">
+                                        <ui:UiElementExists.Target>
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="445fc0c3ca2698a1ba427e04f7265fe4" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_acctId_desc' tag='P' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                        </ui:UiElementExists.Target>
+                                      </ui:UiElementExists>
+                                    </PickBranch.Trigger>
+                                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Go button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_21" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                      <ui:Click.CursorPosition>
+                                        <ui:CursorPosition Position="Center">
+                                          <ui:CursorPosition.OffsetX>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetX>
+                                          <ui:CursorPosition.OffsetY>
+                                            <InArgument x:TypeArguments="x:Int32" />
+                                          </ui:CursorPosition.OffsetY>
+                                        </ui:CursorPosition>
+                                      </ui:Click.CursorPosition>
+                                      <ui:Click.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5a8ef9d22b6d1e2f12cd1028651a9059" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_btnGo' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                      </ui:Click.Target>
+                                    </ui:Click>
+                                  </PickBranch>
+                                </Pick>
+                                <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="863.2,52.4" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+                                  <ui:CommentOut.Body>
+                                    <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="696.4,694.8" sap2010:WorkflowViewState.IdRef="Sequence_28">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:WaitUiElementAppear DisplayName="Find Element: AccountId description" FoundElement="[AccountIdDescUiElement]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="WaitUiElementAppear_3" WaitActive="False" WaitVisible="True">
+                                        <ui:WaitUiElementAppear.Target>
+                                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="f9bea4cd62e8847dd15cefcfdd0dc6ff" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_acctId_desc' tag='P' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                        </ui:WaitUiElementAppear.Target>
+                                      </ui:WaitUiElementAppear>
+                                      <If Condition="[AccountIdDescElementExist]" DisplayName="If- Account ID Description exist" sap:VirtualizedContainerService.HintSize="314,52.4" sap2010:WorkflowViewState.IdRef="If_14">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Go button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                            <ui:Click.CursorPosition>
+                                              <ui:CursorPosition Position="Center">
+                                                <ui:CursorPosition.OffsetX>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetX>
+                                                <ui:CursorPosition.OffsetY>
+                                                  <InArgument x:TypeArguments="x:Int32" />
+                                                </ui:CursorPosition.OffsetY>
+                                              </ui:CursorPosition>
+                                            </ui:Click.CursorPosition>
+                                            <ui:Click.Target>
+                                              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="c8f6b8e6a11487d5302d4c408ccf0e4f" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_btnGo' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                            </ui:Click.Target>
+                                          </ui:Click>
+                                        </If.Then>
+                                        <If.Else>
+                                          <Sequence DisplayName="VAC desc element does not exist" sap:VirtualizedContainerService.HintSize="336,315" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Warn" Message="[&quot;Cannot find the Account ID description Element.&quot;]" />
+                                            <Assign DisplayName="Assign- System Exce" sap:VirtualizedContainerService.HintSize="314,60" sap2010:WorkflowViewState.IdRef="Assign_16">
+                                              <Assign.To>
+                                                <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                              </Assign.To>
+                                              <Assign.Value>
+                                                <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find Account ID description element: "+AccountIdDescUiElement.ToString )]</InArgument>
+                                              </Assign.Value>
+                                            </Assign>
+                                          </Sequence>
+                                        </If.Else>
+                                      </If>
+                                    </Sequence>
+                                  </ui:CommentOut.Body>
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                </ui:CommentOut>
+                                <ui:UiElementExists DisplayName="Element Exists: Runtime error" Exists="[runtimeErrorElementExist]" sap:VirtualizedContainerService.HintSize="863.2,106" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
+                                  <ui:UiElementExists.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="1472e705884dc816cc6d09dcf498f61d" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='finErrorPopup' tag='DIV' parentclass='claro' /&gt;" TimeoutMS="3000" WaitForReady="COMPLETE" />
+                                  </ui:UiElementExists.Target>
+                                </ui:UiElementExists>
+                                <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="863.2,52.4" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                                  <ui:CommentOut.Body>
+                                    <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="486,374" sap2010:WorkflowViewState.IdRef="Sequence_18">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <If Condition="[AccountIdDescElementExist]" sap:VirtualizedContainerService.HintSize="464,250" sap2010:WorkflowViewState.IdRef="If_12">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <If.Then>
+                                          <Sequence DisplayName="Click Go Button &amp; error element exist." sap:VirtualizedContainerService.HintSize="200,100.4" sap2010:WorkflowViewState.IdRef="Sequence_17">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                          </Sequence>
+                                        </If.Then>
+                                      </If>
+                                    </Sequence>
+                                  </ui:CommentOut.Body>
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                </ui:CommentOut>
+                              </Sequence>
+                            </If.Then>
+                            <If.Else>
+                              <Sequence DisplayName="VAC title element does not exist" sap:VirtualizedContainerService.HintSize="336,317.2" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Warn" Message="[&quot;Cannot find the Verify Account Closure title Element.&quot;]" />
+                                <Assign DisplayName="Assign- System Exce" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_13">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="s:Exception">[new System.Exception("Cannot find VAC title element: "+ elementVACTitle )]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                            </If.Else>
+                          </If>
+                        </Sequence>
+                      </ui:CommentOut.Body>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:CommentOut>
+                  </Sequence>
+                </TryCatch.Try>
+                <TryCatch.Catches>
+                  <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="749.6,22.8" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ActivityAction x:TypeArguments="s:Exception">
+                      <ActivityAction.Argument>
+                        <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
+                      </ActivityAction.Argument>
+                      <Assign DisplayName="Assign- System error" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_17">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="s:Exception">[out_SystemException]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="s:Exception">[exception]</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </ActivityAction>
+                  </Catch>
+                </TryCatch.Catches>
+              </TryCatch>
+            </Sequence>
+          </ActivityAction>
+        </ui:BrowserScope.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:BrowserScope>
+    </FlowStep>
+    <FlowDecision x:Name="__ReferenceID7" Condition="[CBool(in_Config(&quot;Global_Email_TeamLeader&quot;).ToString)]" DisplayName="Email Team leader?" sap:VirtualizedContainerService.HintSize="107,87" sap2010:WorkflowViewState.IdRef="FlowDecision_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <av:Point x:Key="ShapeLocation">246.8,126.4</av:Point>
+          <av:Size x:Key="ShapeSize">107,87</av:Size>
+          <av:PointCollection x:Key="FalseConnector">353.2,170 430,170 430,403.9 400,403.9</av:PointCollection>
+          <av:PointCollection x:Key="TrueConnector">246.8,170 150,170 150,253.8</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <FlowDecision.True>
+        <FlowStep x:Name="__ReferenceID6">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <av:Point x:Key="ShapeLocation">50,253.8</av:Point>
+              <av:Size x:Key="ShapeSize">200,51</av:Size>
+              <av:PointCollection x:Key="ConnectorLocation">150,304.8 150,403.2 200,403.2</av:PointCollection>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke EmailJobStatus workflow" sap:VirtualizedContainerService.HintSize="200,51" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Framework\EmailJobStatus.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[in_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+          </ui:InvokeWorkflowFile>
+          <FlowStep.Next>
+            <x:Reference>__ReferenceID5</x:Reference>
+          </FlowStep.Next>
+        </FlowStep>
+      </FlowDecision.True>
+      <FlowDecision.False>
+        <x:Reference>__ReferenceID5</x:Reference>
+      </FlowDecision.False>
+    </FlowDecision>
+    <x:Reference>__ReferenceID6</x:Reference>
+  </Flowchart>
+</Activity>

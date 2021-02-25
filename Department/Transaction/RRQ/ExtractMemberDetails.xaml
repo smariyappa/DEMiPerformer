@@ -1,0 +1,449 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ExtractMemberDetails" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_BusinessRuleException" Type="OutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="out_MemberName" Type="OutArgument(x:String)" />
+    <x:Property Name="out_EmailId" Type="OutArgument(x:String)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>983.2,2694</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Credentials.Activities</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>UiPath.CSV.Activities</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>UiPath.CSV</x:String>
+      <x:String>UiPath.Mail.Activities</x:String>
+      <x:String>UiPath.Mail.Exchange.Activities</x:String>
+      <x:String>UiPath.Mail.IMAP.Activities</x:String>
+      <x:String>UiPath.Mail.Outlook.Activities</x:String>
+      <x:String>UiPath.Mail.POP3.Activities</x:String>
+      <x:String>UiPath.Mail.SMTP.Activities</x:String>
+      <x:String>UiPath.Orchestrator.Client</x:String>
+      <x:String>UiPath.Orchestrator.Client.Models</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+      <x:String>UiPath.JSON.Activities</x:String>
+      <x:String>UiPath.REST.Activities</x:String>
+      <x:String>UiPath.SOAP.Activities</x:String>
+      <x:String>UiPath.XML.Activities</x:String>
+      <x:String>UiPath.Web</x:String>
+      <x:String>UiPath.Database.Activities</x:String>
+      <x:String>UiPath.Database</x:String>
+      <x:String>System.Windows.Markup</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Plugin.Workflow</AssemblyReference>
+      <AssemblyReference>UiPath.Credentials.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.OrchestratorClient</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web</AssemblyReference>
+      <AssemblyReference>UiPath.Database.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Database</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Extract Member details:&#xA;- Member name&#xA;- Email Address" DisplayName="Process transaction type of Credit" sap:VirtualizedContainerService.HintSize="943.2,2614" sap2010:WorkflowViewState.IdRef="Sequence_179">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:Int32" Name="pickDelayInquireOnAccount" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Attach Browser- Demi Browser" sap:VirtualizedContainerService.HintSize="921.2,2428.8" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="5a881d5453e91ce46dae66286b25adea" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;">
+      <ui:BrowserScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="907.2,2282.8" sap2010:WorkflowViewState.IdRef="Sequence_182">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:String" Name="RawMemberName" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- Accept radio button" sap:VirtualizedContainerService.HintSize="885.2,106" sap2010:WorkflowViewState.IdRef="Click_125" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="2c1841ef5a94c8fbd256d53ed9561444" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_accept_radio' tag='INPUT' /&gt;" WaitForReady="COMPLETE" />
+              </ui:Click.Target>
+            </ui:Click>
+            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- box with arrow to extract Scheme Code" sap:VirtualizedContainerService.HintSize="885.2,106" sap2010:WorkflowViewState.IdRef="Click_126" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+              <ui:Click.CursorPosition>
+                <ui:CursorPosition Position="Center">
+                  <ui:CursorPosition.OffsetX>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetX>
+                  <ui:CursorPosition.OffsetY>
+                    <InArgument x:TypeArguments="x:Int32" />
+                  </ui:CursorPosition.OffsetY>
+                </ui:CursorPosition>
+              </ui:Click.CursorPosition>
+              <ui:Click.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5031b396b320c28fd215134c7f51c8f4" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='_nacid$explode_image' tag='IMG' /&gt;" WaitForReady="COMPLETE" />
+              </ui:Click.Target>
+            </ui:Click>
+            <Assign DisplayName="Assign- Pick delay to find scheme code" sap:VirtualizedContainerService.HintSize="885.2,59.6" sap2010:WorkflowViewState.IdRef="Assign_88">
+              <Assign.To>
+                <OutArgument x:TypeArguments="x:Int32">[pickDelayInquireOnAccount]</OutArgument>
+              </Assign.To>
+              <Assign.Value>
+                <InArgument x:TypeArguments="x:Int32">[15000]</InArgument>
+              </Assign.Value>
+            </Assign>
+            <Pick sap2010:Annotation.AnnotationText="Basic Account Details exist/ Exception" DisplayName="Pick- Basic Account details/Exception" sap:VirtualizedContainerService.HintSize="885.2,97.2" sap2010:WorkflowViewState.IdRef="Pick_13">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <PickBranch DisplayName="PickBranch- Default" sap:VirtualizedContainerService.HintSize="365.6,769.2" sap2010:WorkflowViewState.IdRef="PickBranch_37">
+                <PickBranch.Trigger>
+                  <Delay DisplayName="Delay- 00:00:13" Duration="00:00:13" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_27" />
+                </PickBranch.Trigger>
+                <Sequence DisplayName="Cannot find Basic account details- BR exception" sap:VirtualizedContainerService.HintSize="336,317.2" sap2010:WorkflowViewState.IdRef="Sequence_173">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message- Business rule exception" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_51" Level="Error" Message="[&quot;Cannot find the basic account details&quot;]" />
+                  <Assign DisplayName="Assign- Business rule exception" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_89">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Failed to extract member email address: Cannot find the basic account details, Investigate.")]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </PickBranch>
+              <PickBranch DisplayName="PickBranch- Basic Account details" sap:VirtualizedContainerService.HintSize="365.6,769.2" sap2010:WorkflowViewState.IdRef="PickBranch_40">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <PickBranch.Trigger>
+                  <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists : Basic Account details" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_35">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="9f36fe80c414867d9e479e85610e33de" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Acctid_expFrame' tag='IFRAME' /&gt;&lt;webctrl id='id1_textSpan' tag='SPAN' aaname='Basic Account Details' parentclass='active' /&gt;" TimeoutMS="[pickDelayInquireOnAccount]" WaitForReady="COMPLETE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                </PickBranch.Trigger>
+                <Sequence DisplayName="Fetch related party details" sap:VirtualizedContainerService.HintSize="336,230" sap2010:WorkflowViewState.IdRef="Sequence_175">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click 'Related Party Details'" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_127" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                    <ui:Click.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:Click.CursorPosition>
+                    <ui:Click.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9ef392f92c8498dee77d77557646fee3" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Acctid_expFrame' tag='IFRAME' /&gt;&lt;webctrl id='id26_textSpan' tag='SPAN' aaname='Related Party Details' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:Click.Target>
+                  </ui:Click>
+                </Sequence>
+              </PickBranch>
+              <PickBranch DisplayName="PickBranch- Error, The account is not an 'SB', 'CA', 'OD' or 'CC' account." sap:VirtualizedContainerService.HintSize="365.6,769.2" sap2010:WorkflowViewState.IdRef="PickBranch_41">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <PickBranch.Trigger>
+                  <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists- Error description" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_37">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="e533b91b68d0abccaa48902ef9cafc94" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='finErrorPopup' parentid='finErrorPopupContainer' tag='DIV' parentclass='claro' /&gt;&lt;webctrl tag='P' aaname='The account is not an &amp;apos;SB&amp;apos;, &amp;apos;CA&amp;apos;, &amp;apos;OD&amp;apos; or &amp;apos;CC&amp;apos; account.' id='errorItem_0.errorDesc' /&gt;" TimeoutMS="[pickDelayInquireOnAccount]" WaitForReady="COMPLETE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                </PickBranch.Trigger>
+                <Sequence DisplayName="Set scheme char, account type is Loan" sap:VirtualizedContainerService.HintSize="336,463.2" sap2010:WorkflowViewState.IdRef="Sequence_176">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message- The account is not Savings A/C." sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_53" Level="Info" Message="[&quot;The account is not an 'SB', 'CA', 'OD' or 'CC' account.&quot;]" />
+                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- close error pop-up" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_128" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                    <ui:Click.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:Click.CursorPosition>
+                    <ui:Click.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="0366e445207bd18f735d831ef9afa45b" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl parentid='finErrorPopup' tag='SPAN' class='dijitDialogCloseIcon' /&gt;" WaitForReady="COMPLETE" />
+                    </ui:Click.Target>
+                  </ui:Click>
+                  <Assign DisplayName="Assign- Business rule exception" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_93">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Failed to extract member email address: The account is not an 'SB', 'CA', 'OD' or 'CC' account.")]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </PickBranch>
+              <PickBranch DisplayName="PickBranch- Error, No privileges to access" sap:VirtualizedContainerService.HintSize="365.6,769.2" sap2010:WorkflowViewState.IdRef="PickBranch_42">
+                <PickBranch.Trigger>
+                  <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists- Error (No privileges to access this account)" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_38">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b8d0ab1e77ee067230f73f51b33dfe1d" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='finErrorPopup' parentid='finErrorPopupContainer' tag='DIV' parentclass='claro' /&gt;&lt;webctrl tag='P' aaname='You do not have the necessary privileges for access to this account.' id='errorItem_0.errorDesc' /&gt;" TimeoutMS="[pickDelayInquireOnAccount]" WaitForReady="COMPLETE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                </PickBranch.Trigger>
+                <Sequence DisplayName="No privileges to access this account" sap:VirtualizedContainerService.HintSize="336,463.2" sap2010:WorkflowViewState.IdRef="Sequence_177">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message- No privileges to access this account." sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_54" Level="Info" Message="[&quot;You do not have the necessary privileges for access to this account.&quot;]" />
+                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click- close error pop-up" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_129" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                    <ui:Click.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:Click.CursorPosition>
+                    <ui:Click.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="0366e445207bd18f735d831ef9afa45b" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl parentid='finErrorPopup' tag='SPAN' class='dijitDialogCloseIcon' /&gt;" WaitForReady="COMPLETE" />
+                    </ui:Click.Target>
+                  </ui:Click>
+                  <Assign DisplayName="Assign- Business rule exception" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_94">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Failed to extract member email address: You do not have the necessary privileges for access to this account")]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </PickBranch>
+            </Pick>
+            <Pick sap2010:Annotation.AnnotationText="Extract Member name and email address." DisplayName="Pick- Extract Email ID" sap:VirtualizedContainerService.HintSize="885.2,840.8" sap2010:WorkflowViewState.IdRef="Pick_14">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <PickBranch DisplayName="PickBranch- Delay" sap:VirtualizedContainerService.HintSize="365.6,766.4" sap2010:WorkflowViewState.IdRef="PickBranch_43">
+                <PickBranch.Trigger>
+                  <Delay DisplayName="Delay- 00:00:13" Duration="00:00:13" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_29" />
+                </PickBranch.Trigger>
+                <Sequence DisplayName="Cannot extract email Id" sap:VirtualizedContainerService.HintSize="336,317.2" sap2010:WorkflowViewState.IdRef="Sequence_181">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message- Business rule exception" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_56" Level="Error" Message="[&quot;Failed to extract email address.&quot;]" />
+                  <Assign DisplayName="Assign- Business rule exception" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_95">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Failed to extract member email address, Investigate.")]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </PickBranch>
+              <PickBranch DisplayName="PickBranch- Get member email" sap:VirtualizedContainerService.HintSize="365.6,766.4" sap2010:WorkflowViewState.IdRef="PickBranch_44">
+                <PickBranch.Trigger>
+                  <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists - Main column" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_39">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="5d448229a97d95c8211048ab4f52098d" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Acctid_expFrame' tag='IFRAME' /&gt;&lt;webctrl parentid='dojox_grid__View_23' tag='TABLE' idx='1' /&gt;&lt;webctrl parentid='dojox_grid__View_23' tag='TR' /&gt;&lt;webctrl tableCol='3' tag='TD' colName='Main' /&gt;" TimeoutMS="[pickDelayInquireOnAccount]" WaitForReady="COMPLETE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                </PickBranch.Trigger>
+                <Sequence sap2010:Annotation.AnnotationText="Find member name &amp; Email-ID of relation type = Main" DisplayName="Fetch member emaild" sap:VirtualizedContainerService.HintSize="336,460.4" sap2010:WorkflowViewState.IdRef="Sequence_180">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get Attribute 'TD', EmailID" sap:VirtualizedContainerService.HintSize="314,134" sap2010:WorkflowViewState.IdRef="GetAttribute_9">
+                    <ui:GetAttribute.Result>
+                      <OutArgument x:TypeArguments="x:String">[out_EmailId]</OutArgument>
+                    </ui:GetAttribute.Result>
+                    <ui:GetAttribute.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f5343958e314f3a0eec0ff8a53130d00" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Acctid_expFrame' tag='IFRAME' /&gt;&lt;webctrl idx='1' parentid='dojox_grid__View_23' tag='TABLE' /&gt;&lt;webctrl parentid='dojox_grid__View_23' tag='TR' /&gt;&lt;webctrl tableCol='7' tag='TD' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:GetAttribute.Target>
+                  </ui:GetAttribute>
+                  <ui:GetAttribute ContinueOnError="{x:Null}" Attribute="aaname" DisplayName="Get Attribute 'TD'- Member Name" sap:VirtualizedContainerService.HintSize="314,134" sap2010:WorkflowViewState.IdRef="GetAttribute_10">
+                    <ui:GetAttribute.Result>
+                      <OutArgument x:TypeArguments="x:String">[RawMemberName]</OutArgument>
+                    </ui:GetAttribute.Result>
+                    <ui:GetAttribute.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="8422dc96b338d65f2c89f39496dd9adc" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl id='Acctid_expFrame' tag='IFRAME' /&gt;&lt;webctrl idx='1' parentid='dojox_grid__View_23' tag='TABLE' /&gt;&lt;webctrl parentid='dojox_grid__View_23' tag='TR' /&gt;&lt;webctrl tableCol='2' tag='TD' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:GetAttribute.Target>
+                  </ui:GetAttribute>
+                </Sequence>
+              </PickBranch>
+            </Pick>
+            <If Condition="[Not String.IsNullOrEmpty(RawMemberName)]" DisplayName="If- membername is not empty, fetch only firstname" sap:VirtualizedContainerService.HintSize="885.2,432.8" sap2010:WorkflowViewState.IdRef="If_1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If.Then>
+                <Sequence DisplayName="fetch firstname" sap:VirtualizedContainerService.HintSize="264.4,283.2" sap2010:WorkflowViewState.IdRef="Sequence_183">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Assign DisplayName="Assign- Member firstname" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_96">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:String">[out_MemberName]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:String">[RawMemberName.Split({" "}, StringSplitOptions.None)(0)]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <Assign DisplayName="Assign- propercase" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_98">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:String">[out_MemberName]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:String">[StrConv(out_MemberName, VbStrConv.ProperCase)]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                </Sequence>
+              </If.Then>
+            </If>
+            <ui:CommentOut sap2010:Annotation.AnnotationText="Application exception" DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="885.2,80.8" sap2010:WorkflowViewState.IdRef="CommentOut_58">
+              <ui:CommentOut.Body>
+                <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="336,230" sap2010:WorkflowViewState.IdRef="Sequence_178">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Close Inquire on Account Window " sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_130" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                    <ui:Click.CursorPosition>
+                      <ui:CursorPosition Position="Center">
+                        <ui:CursorPosition.OffsetX>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetX>
+                        <ui:CursorPosition.OffsetY>
+                          <InArgument x:TypeArguments="x:Int32" />
+                        </ui:CursorPosition.OffsetY>
+                      </ui:CursorPosition>
+                    </ui:Click.CursorPosition>
+                    <ui:Click.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="5378a46d459eff5cc4b275bbfec74d62" Selector="&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='Core_CORE' tag='IFRAME' /&gt;&lt;webctrl id='UX' tag='IFRAME' /&gt;&lt;webctrl parentid='finModal' tag='SPAN' class='dijitDialogCloseIcon' /&gt;" WaitForReady="COMPLETE" />
+                    </ui:Click.Target>
+                  </ui:Click>
+                </Sequence>
+              </ui:CommentOut.Body>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+            </ui:CommentOut>
+            <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Hotkey- Close Inquire on Account Window " EmptyField="False" sap:VirtualizedContainerService.HintSize="464,155.6" sap2010:WorkflowViewState.IdRef="SendHotkey_2" Key="esc" KeyModifiers="None" SendWindowMessages="True" SpecialKey="True">
+              <ui:SendHotkey.Target>
+                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b2d76ab7bbe6db860da11dc7d7e32806" WaitForReady="INTERACTIVE" />
+              </ui:SendHotkey.Target>
+            </ui:SendHotkey>
+          </Sequence>
+        </ActivityAction>
+      </ui:BrowserScope.Body>
+    </ui:BrowserScope>
+  </Sequence>
+</Activity>

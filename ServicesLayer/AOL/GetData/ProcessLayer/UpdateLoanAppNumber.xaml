@@ -1,0 +1,486 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="UpdateLoanAppNumber" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="in_RetryNumber" Type="InArgument(x:Int32)" />
+    <x:Property Name="in_wbParentPath" Type="InArgument(x:String)" />
+    <x:Property Name="in_DT_AOL" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>1181.2,3459.2</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Update loan app number." DisplayName="UpdateLoanAppNumber" sap:VirtualizedContainerService.HintSize="1141.2,3259.2" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:DatabaseConnection" Name="DBConnection" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message- Enter MBTT menu" sap:VirtualizedContainerService.HintSize="1119.2,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;Start of update loan App number.&quot;]" />
+    <Sequence DisplayName="Establish DB connection" sap:VirtualizedContainerService.HintSize="1119.2,52.4" sap2010:WorkflowViewState.IdRef="Sequence_16">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:String" Name="ConnectionString" />
+      </Sequence.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:Replace DisplayName="Replace- DatabaseName" sap:VirtualizedContainerService.HintSize="314,59.2" sap2010:WorkflowViewState.IdRef="Replace_2" Input="[in_Config(&quot;Global_ConnectionString&quot;).ToString]" IsBuilderTabModified="False" Pattern="DatabaseName" RegexOption="IgnoreCase, Compiled" Replacement="[in_Config(&quot;Global_DB_DEMi&quot;).ToString]" Result="[ConnectionString]" />
+      <ui:DatabaseConnect DatabaseConnection="[DBConnection]" DisplayName="Connect- Supply Connection string " sap:VirtualizedContainerService.HintSize="314,59.2" sap2010:WorkflowViewState.IdRef="DatabaseConnect_1" ProviderName="System.Data.SqlClient" ConnectionString="[ConnectionString]" />
+    </Sequence>
+    <ui:BrowserScope Browser="{x:Null}" SearchScope="{x:Null}" TimeoutMS="{x:Null}" UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Attach Browser 'chrome.exe  ApplyOnline'" sap:VirtualizedContainerService.HintSize="1119.2,2788.4" sap2010:WorkflowViewState.IdRef="BrowserScope_1" InformativeScreenshot="ddb00fbba465901b7baac136411c317c" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;">
+      <ui:BrowserScope.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="1105.2,2642.4" sap2010:WorkflowViewState.IdRef="Sequence_3">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[in_DT_AOL]" DisplayName="For Each Row- DT_LoanApps" sap:VirtualizedContainerService.HintSize="1083.2,2518.4" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+              <ui:ForEachRow.Body>
+                <ActivityAction x:TypeArguments="sd:DataRow">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="1053.6,2370.4" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                    <Sequence.Variables>
+                      <Variable x:TypeArguments="x:String" Name="ViewDocumentUrl" />
+                      <Variable x:TypeArguments="x:String" Name="ApplicationId" />
+                      <Variable x:TypeArguments="x:String" Name="ApplicationNumber" />
+                      <Variable x:TypeArguments="sd:DataTable" Name="DT_LoanApps" />
+                      <Variable x:TypeArguments="x:String" Name="LoanAppNumber" />
+                    </Sequence.Variables>
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <Assign DisplayName="Assign- ViewDocument Url" sap:VirtualizedContainerService.HintSize="1031.6,59.6" sap2010:WorkflowViewState.IdRef="Assign_1">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[ViewDocumentUrl]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[row.Item("ApplicationUrl").ToString.Trim]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:Replace sap2010:Annotation.AnnotationText="ApplicationId variable" DisplayName="Replace- All Non-digit character by empty value" sap:VirtualizedContainerService.HintSize="1031.6,80.8" sap2010:WorkflowViewState.IdRef="Replace_1" Input="[ViewDocumentUrl]" IsBuilderTabModified="False" Pattern="\D" RegexOption="IgnoreCase, Compiled" Result="[ApplicationId]">
+                      <ui:Replace.Replacement>
+                        <InArgument x:TypeArguments="x:String">
+                          <Literal x:TypeArguments="x:String" Value="" />
+                        </InArgument>
+                      </ui:Replace.Replacement>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:Replace>
+                    <Assign DisplayName="Assign- Application Number" sap:VirtualizedContainerService.HintSize="1031.6,59.6" sap2010:WorkflowViewState.IdRef="Assign_2">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[ApplicationNumber]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[row.Item("ApplicationNumber").ToString.Trim]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <ui:ExecuteQuery ContinueOnError="{x:Null}" TimeoutMS="{x:Null}" CommandType="Text" DataTable="[DT_LoanApps]" DisplayName="Execute Query- SELECT LoanAppNumber for the AOL application" ExistingDbConnection="[DBConnection]" sap:VirtualizedContainerService.HintSize="1031.6,88.4" sap2010:WorkflowViewState.IdRef="ExecuteQuery_1" Sql="[&quot;SELECT LoanAccountId FROM RetailLoanDetails WHERE ApplicationId = '&quot;+ApplicationNumber+&quot;'&quot;]">
+                      <ui:ExecuteQuery.Parameters>
+                        <scg:Dictionary x:TypeArguments="x:String, Argument" />
+                      </ui:ExecuteQuery.Parameters>
+                    </ui:ExecuteQuery>
+                    <Assign DisplayName="Assign- Loan App Number" sap:VirtualizedContainerService.HintSize="1031.6,59.6" sap2010:WorkflowViewState.IdRef="Assign_6">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:String">[LoanAppNumber]</OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:String">[DT_LoanApps.Rows(0).item("LoanAccountId").ToString]</InArgument>
+                      </Assign.Value>
+                    </Assign>
+                    <If Condition="[DT_LoanApps.Rows.Count &gt; 0 AND Not String.IsNullOrEmpty(LoanAppNumber)]" DisplayName="If- DT_LoanApps count &gt; 0 AND LoanAccountID exists" sap:VirtualizedContainerService.HintSize="1031.6,1698.4" sap2010:WorkflowViewState.IdRef="If_1">
+                      <If.Then>
+                        <Sequence DisplayName="Update Loan App number" sap:VirtualizedContainerService.HintSize="907.2,1548.8" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                          <Sequence.Variables>
+                            <Variable x:TypeArguments="x:String" Name="ViewDocSelector" />
+                          </Sequence.Variables>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <Assign DisplayName="Assign- ViewDocument selector" sap:VirtualizedContainerService.HintSize="885.2,59.6" sap2010:WorkflowViewState.IdRef="Assign_4">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:String">[ViewDocSelector]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:String">["&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl parentname='PageForm' tag='A' href='"+ViewDocumentUrl+"' /&gt;"]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <Pick sap2010:Annotation.AnnotationText="Click View Doc Application Number" DisplayName="Pick- Error/ Click loan Application Number " sap:VirtualizedContainerService.HintSize="885.2,97.2" sap2010:WorkflowViewState.IdRef="Pick_1">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <PickBranch DisplayName="PickBranch- Error" sap:VirtualizedContainerService.HintSize="365.6,685.6" sap2010:WorkflowViewState.IdRef="PickBranch_1">
+                              <PickBranch.Trigger>
+                                <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_1" />
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,425.6" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Error" Message="[ApplicationNumber+&quot;Cannot Click View Doc URL&quot;]" />
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Applications Menu- My To Do" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_7" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e72b0cd0704a4e707827578d53d11b8a" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl tag='A' aaname='My To Do' href='MyToDo.asp' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                </ui:Click>
+                                <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_1" />
+                              </Sequence>
+                            </PickBranch>
+                            <PickBranch DisplayName="PickBranch- Click View doc Url" sap:VirtualizedContainerService.HintSize="365.6,685.6" sap2010:WorkflowViewState.IdRef="PickBranch_2">
+                              <PickBranch.Trigger>
+                                <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists - Click ViewDocument URL" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+                                  <ui:UiElementExists.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="fd506a6a0a66d5290e6577d70684e396" Selector="[ViewDocSelector]" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                                  </ui:UiElementExists.Target>
+                                </ui:UiElementExists>
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Click View doc Url" sap:VirtualizedContainerService.HintSize="336,230" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click View doc Url" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b1e7613c7271b3ee153cd10a769de7c0" Selector="[ViewDocSelector]" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                </ui:Click>
+                              </Sequence>
+                            </PickBranch>
+                          </Pick>
+                          <Pick sap2010:Annotation.AnnotationText="Click processing tab" DisplayName="Pick- Error/ Click processing tab" sap:VirtualizedContainerService.HintSize="885.2,80.8" sap2010:WorkflowViewState.IdRef="Pick_2">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <PickBranch DisplayName="PickBranch- Error" sap:VirtualizedContainerService.HintSize="365.6,685.6" sap2010:WorkflowViewState.IdRef="PickBranch_3">
+                              <PickBranch.Trigger>
+                                <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_2" />
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,425.6" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Error" Message="[ApplicationNumber+&quot;Cannot Processing tab&quot;]" />
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Applications Menu- My To Do" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_8" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e72b0cd0704a4e707827578d53d11b8a" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl tag='A' aaname='My To Do' href='MyToDo.asp' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                </ui:Click>
+                                <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_2" />
+                              </Sequence>
+                            </PickBranch>
+                            <PickBranch DisplayName="PickBranch- Click processing tab" sap:VirtualizedContainerService.HintSize="365.6,685.6" sap2010:WorkflowViewState.IdRef="PickBranch_4">
+                              <PickBranch.Trigger>
+                                <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists - Click process tab" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_2">
+                                  <ui:UiElementExists.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="106c78110e89603c59124bca62defa55" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl parentname='PageForm' tag='TR' innertext='*Processing*' /&gt;&lt;webctrl tag='TD' class='NonSelectedTab ProcessingTab' colName='Processing' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                                  </ui:UiElementExists.Target>
+                                </ui:UiElementExists>
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Click processing tab" sap:VirtualizedContainerService.HintSize="336,258.4" sap2010:WorkflowViewState.IdRef="Sequence_8">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="*** Input type Default ***" ClickType="CLICK_SINGLE" DisplayName="Click process tab" sap:VirtualizedContainerService.HintSize="314,134.4" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="80abebf87bd97a032045c3570fcfc70d" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl parentname='PageForm' tag='TR' innertext='*Processing*' /&gt;&lt;webctrl tag='TD' class='NonSelectedTab ProcessingTab' colName='Processing' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                </ui:Click>
+                              </Sequence>
+                            </PickBranch>
+                          </Pick>
+                          <Pick sap2010:Annotation.AnnotationText="Update DEMi loan App number" DisplayName="Pick- Error/ Update loan App number" sap:VirtualizedContainerService.HintSize="885.2,946.4" sap2010:WorkflowViewState.IdRef="Pick_3">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <PickBranch DisplayName="PickBranch- Error" sap:VirtualizedContainerService.HintSize="365.6,872" sap2010:WorkflowViewState.IdRef="PickBranch_5">
+                              <PickBranch.Trigger>
+                                <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_3" />
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,425.6" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[ApplicationNumber+&quot;Cannot update the loan app number.&quot;]" />
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Applications Menu- My To Do" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_9" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e72b0cd0704a4e707827578d53d11b8a" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl tag='A' aaname='My To Do' href='MyToDo.asp' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                </ui:Click>
+                                <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_3" />
+                              </Sequence>
+                            </PickBranch>
+                            <PickBranch DisplayName="PickBranch- Update loan App number" sap:VirtualizedContainerService.HintSize="365.6,872" sap2010:WorkflowViewState.IdRef="PickBranch_6">
+                              <PickBranch.Trigger>
+                                <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists - Update loan App number" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+                                  <ui:UiElementExists.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="b52872f9c60f43df6e57eb3f99d2ea45" Selector="&lt;webctrl tag='INPUT' colName='Loan Account Number' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                                  </ui:UiElementExists.Target>
+                                </ui:UiElementExists>
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Update loan App number" sap:VirtualizedContainerService.HintSize="336,566" sap2010:WorkflowViewState.IdRef="Sequence_10">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message- Updating loan app number" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;Application Id: &quot;+ ApplicationNumber +&quot;, Updating loan app number &quot;+LoanAppNumber]" />
+                                <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into - Loan App Number" EmptyField="False" sap:VirtualizedContainerService.HintSize="314,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[LoanAppNumber]">
+                                  <ui:TypeInto.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="b52872f9c60f43df6e57eb3f99d2ea45" Selector="&lt;webctrl tag='INPUT' colName='Loan Account Number' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:TypeInto.Target>
+                                </ui:TypeInto>
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="*** Input type default ***" ClickType="CLICK_SINGLE" DisplayName="Click- Save" sap:VirtualizedContainerService.HintSize="314,134.4" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="289c03de6da3839ab107709d2b3641c0" Selector="&lt;webctrl tag='DIV' class='Toolbar' idx='2' /&gt;&lt;webctrl tag='UL' class='ActionToolbar' parentclass='MainList' /&gt;&lt;webctrl tag='LI' innertext='*Save*' parentclass='ActionToolbar' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                </ui:Click>
+                              </Sequence>
+                            </PickBranch>
+                          </Pick>
+                          <Pick sap2010:Annotation.AnnotationText="Click MyToDo" DisplayName="Pick- Error/ Click MyToDo" sap:VirtualizedContainerService.HintSize="885.2,80.8" sap2010:WorkflowViewState.IdRef="Pick_4">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <PickBranch DisplayName="PickBranch- Error" sap:VirtualizedContainerService.HintSize="365.6,685.6" sap2010:WorkflowViewState.IdRef="PickBranch_7">
+                              <PickBranch.Trigger>
+                                <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_4" />
+                              </PickBranch.Trigger>
+                              <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,425.6" sap2010:WorkflowViewState.IdRef="Sequence_15">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="[ApplicationNumber+&quot;Cannot Click My-ToDo menu.&quot;]" />
+                                <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Applications Menu- My To Do" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_10" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                  <ui:Click.CursorPosition>
+                                    <ui:CursorPosition Position="Center">
+                                      <ui:CursorPosition.OffsetX>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetX>
+                                      <ui:CursorPosition.OffsetY>
+                                        <InArgument x:TypeArguments="x:Int32" />
+                                      </ui:CursorPosition.OffsetY>
+                                    </ui:CursorPosition>
+                                  </ui:Click.CursorPosition>
+                                  <ui:Click.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e72b0cd0704a4e707827578d53d11b8a" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl tag='A' aaname='My To Do' href='MyToDo.asp' /&gt;" WaitForReady="INTERACTIVE" />
+                                  </ui:Click.Target>
+                                </ui:Click>
+                                <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_4" />
+                              </Sequence>
+                            </PickBranch>
+                            <PickBranch DisplayName="PickBranch- Click MyToDo Menu" sap:VirtualizedContainerService.HintSize="343.6,685.6" sap2010:WorkflowViewState.IdRef="PickBranch_8">
+                              <PickBranch.Trigger>
+                                <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists - MyToDo Menu" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
+                                  <ui:UiElementExists.Target>
+                                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="2ef2c8b42098c2db874bf1464b3a51ca" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl tag='A' aaname='My To Do' href='MyToDo.asp' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                                  </ui:UiElementExists.Target>
+                                </ui:UiElementExists>
+                              </PickBranch.Trigger>
+                              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Applications Menu- My To Do" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                <ui:Click.CursorPosition>
+                                  <ui:CursorPosition Position="Center">
+                                    <ui:CursorPosition.OffsetX>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetX>
+                                    <ui:CursorPosition.OffsetY>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetY>
+                                  </ui:CursorPosition>
+                                </ui:Click.CursorPosition>
+                                <ui:Click.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="e72b0cd0704a4e707827578d53d11b8a" Selector="&lt;html app='chrome.exe' title='ApplyOnline' /&gt;&lt;webctrl tag='A' aaname='My To Do' href='MyToDo.asp' /&gt;" WaitForReady="INTERACTIVE" />
+                                </ui:Click.Target>
+                              </ui:Click>
+                            </PickBranch>
+                          </Pick>
+                        </Sequence>
+                      </If.Then>
+                    </If>
+                  </Sequence>
+                </ActivityAction>
+              </ui:ForEachRow.Body>
+            </ui:ForEachRow>
+          </Sequence>
+        </ActivityAction>
+      </ui:BrowserScope.Body>
+    </ui:BrowserScope>
+    <Sequence DisplayName="Disconnect DB" sap:VirtualizedContainerService.HintSize="1119.2,52.4" sap2010:WorkflowViewState.IdRef="Sequence_17">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:DatabaseDisconnect DatabaseConnection="[DBConnection]" DisplayName="Disconnect- DB connection" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="DatabaseDisconnect_1" />
+    </Sequence>
+  </Sequence>
+</Activity>

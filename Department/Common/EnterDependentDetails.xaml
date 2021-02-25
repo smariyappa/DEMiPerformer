@@ -1,0 +1,333 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="EnterDependentDetails" this:EnterDependentDetails.in_Config="[New System.Collections.Generic.Dictionary(Of string, object)]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_SystemException" Type="OutArgument(s:Exception)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="out_BusinessRuleException" Type="OutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="in_MemberId" Type="InArgument(x:String)" />
+    <x:Property Name="in_LoanAppNumber" Type="InArgument(x:String)" />
+    <x:Property Name="in_DT_DependentDetails" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>647.2,3242.4</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="Enter Dependent details." DisplayName="EnterDependentDetails" sap:VirtualizedContainerService.HintSize="607.2,3162.4" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:DatabaseConnection" Name="DBConnection" />
+      <Variable x:TypeArguments="x:String" Name="ConnectionString" />
+      <Variable x:TypeArguments="s:String[]" Name="Arr_RequiredFields" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message- Enter applicant dependent details" sap:VirtualizedContainerService.HintSize="585.2,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Start of add applicant dependent details.&quot;]" />
+    <Sequence DisplayName="Establish DB connection" sap:VirtualizedContainerService.HintSize="585.2,52.4" sap2010:WorkflowViewState.IdRef="Sequence_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:Replace DisplayName="Replace- DatabaseName" sap:VirtualizedContainerService.HintSize="314,59.2" sap2010:WorkflowViewState.IdRef="Replace_1" Input="[in_Config(&quot;Global_ConnectionString&quot;).ToString]" IsBuilderTabModified="False" Pattern="DatabaseName" RegexOption="IgnoreCase, Compiled" Replacement="[in_Config(&quot;Global_DB_DEMi&quot;).ToString]" Result="[ConnectionString]" />
+      <ui:DatabaseConnect DatabaseConnection="[DBConnection]" DisplayName="Connect- Supply Connection string " sap:VirtualizedContainerService.HintSize="314,59.2" sap2010:WorkflowViewState.IdRef="DatabaseConnect_1" ProviderName="System.Data.SqlClient" ConnectionString="[ConnectionString]" />
+    </Sequence>
+    <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[in_DT_DependentDetails]" DisplayName="For Each Row- Dependent DataTable" sap:VirtualizedContainerService.HintSize="585.2,2691.6" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+      <ui:ForEachRow.Body>
+        <ActivityAction x:TypeArguments="sd:DataRow">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="sd:DataRow" Name="Dependentrow" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="555.6,2543.2" sap2010:WorkflowViewState.IdRef="Sequence_10">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Pick sap2010:Annotation.AnnotationText="Maintain Applicant dependent Details" DisplayName="Pick- Error/Applicant dependent details" sap:VirtualizedContainerService.HintSize="533.6,97.2" sap2010:WorkflowViewState.IdRef="Pick_1">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <PickBranch DisplayName="PickBranch-Error" sap:VirtualizedContainerService.HintSize="365.6,639.2" sap2010:WorkflowViewState.IdRef="PickBranch_1">
+                <PickBranch.Trigger>
+                  <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_1" />
+                </PickBranch.Trigger>
+                <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,379.2" sap2010:WorkflowViewState.IdRef="Sequence_5">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Assign DisplayName="Assign- Error" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_3">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Cannot find application dependent details.")]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Error" Message="[out_BusinessRuleException.Message]" />
+                  <Throw DisplayName="Throw- Error" Exception="[out_BusinessRuleException]" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Throw_1" />
+                </Sequence>
+              </PickBranch>
+              <PickBranch DisplayName="PickBranch- Applicant dependent Details" sap:VirtualizedContainerService.HintSize="365.6,639.2" sap2010:WorkflowViewState.IdRef="PickBranch_2">
+                <PickBranch.Trigger>
+                  <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists- Applicant dependent Details" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_1">
+                    <ui:UiElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="bafacd14214641b80780c907f2f2a15c" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_depdetsec1_headerTitle' tag='H2' aaname='Maintain Dependent Details' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                    </ui:UiElementExists.Target>
+                  </ui:UiElementExists>
+                </PickBranch.Trigger>
+                <Sequence DisplayName="Application dependent Details" sap:VirtualizedContainerService.HintSize="336,217.6" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <ui:LogMessage DisplayName="Log Message- Add dependent details" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[&quot;Add dependent details.&quot;]" />
+                </Sequence>
+              </PickBranch>
+            </Pick>
+            <Sequence DisplayName="Enter dependent data to DEMi" sap:VirtualizedContainerService.HintSize="533.6,2282" sap2010:WorkflowViewState.IdRef="Sequence_9">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:Int32" Name="DependentCount" />
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="511.6,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot; status &quot;+Dependentrow.Item(&quot;Status&quot;).ToString +&quot; NumOfDependents &quot;+Dependentrow.Item(&quot;NumOfDependents&quot;).ToString]" />
+              <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select Item - Dependent status" sap:VirtualizedContainerService.HintSize="511.6,134" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="[Dependentrow.Item(&quot;Status&quot;).ToString]">
+                <ui:SelectItem.Items>
+                  <scg:List x:TypeArguments="x:String" Capacity="4">
+                    <x:String>Select</x:String>
+                    <x:String>Single</x:String>
+                    <x:String>Couple</x:String>
+                  </scg:List>
+                </ui:SelectItem.Items>
+                <ui:SelectItem.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="406e16040692dd0ee24cb1f767db4564" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl tag='SELECT' id='_livArrg_select' /&gt;" WaitForReady="INTERACTIVE" />
+                </ui:SelectItem.Target>
+              </ui:SelectItem>
+              <If sap2010:Annotation.AnnotationText="Number of dependents." Condition="[Not String.IsNullOrEmpty(Dependentrow.Item(&quot;NumOfDependents&quot;).ToString)]" DisplayName="If- No of dependents Is NULL/EMPTY" sap:VirtualizedContainerService.HintSize="511.6,312.4" sap2010:WorkflowViewState.IdRef="If_2">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <If.Then>
+                  <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into - Num of dependents" EmptyField="False" sap:VirtualizedContainerService.HintSize="314,134" sap2010:WorkflowViewState.IdRef="TypeInto_5" SendWindowMessages="False" SimulateType="True" Text="[Dependentrow.Item(&quot;NumOfDependents&quot;).ToString]">
+                    <ui:TypeInto.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="41e24f49fccadeeca03a4a3dbcc62ad0" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_nodep' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+                    </ui:TypeInto.Target>
+                  </ui:TypeInto>
+                </If.Then>
+              </If>
+              <Assign DisplayName="Assign- Dependent count" sap:VirtualizedContainerService.HintSize="511.6,59.6" sap2010:WorkflowViewState.IdRef="Assign_5">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">[DependentCount]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">0</InArgument>
+                </Assign.Value>
+              </Assign>
+              <DoWhile sap2010:Annotation.AnnotationText="Enter dependent age." DisplayName="Do While- Enter dependent age" sap:VirtualizedContainerService.HintSize="511.6,828" sap2010:WorkflowViewState.IdRef="DoWhile_1">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <DoWhile.Condition>[DependentCount &lt; 5]</DoWhile.Condition>
+                <Sequence DisplayName="Enter dependent age" sap:VirtualizedContainerService.HintSize="486,635.6" sap2010:WorkflowViewState.IdRef="Sequence_13">
+                  <Sequence.Variables>
+                    <Variable x:TypeArguments="x:String" Name="DependentSelector" />
+                  </Sequence.Variables>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  <Assign DisplayName="Assign- increment count" sap:VirtualizedContainerService.HintSize="464,59.6" sap2010:WorkflowViewState.IdRef="Assign_6">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:Int32">[DependentCount]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:Int32">[DependentCount + 1]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <Assign DisplayName="Assign- Dependent selector" sap:VirtualizedContainerService.HintSize="464,59.6" sap2010:WorkflowViewState.IdRef="Assign_7">
+                    <Assign.To>
+                      <OutArgument x:TypeArguments="x:String">[DependentSelector]</OutArgument>
+                    </Assign.To>
+                    <Assign.Value>
+                      <InArgument x:TypeArguments="x:String">["&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_depage"+DependentCount.ToString+"' tag='INPUT' /&gt;"]</InArgument>
+                    </Assign.Value>
+                  </Assign>
+                  <If sap2010:Annotation.AnnotationText="Number of dependents." Condition="[Not String.IsNullOrEmpty(Dependentrow.Item(&quot;Dependent&quot;+DependentCount.ToString).ToString)]" DisplayName="If- No of dependents Is NULL/EMPTY" sap:VirtualizedContainerService.HintSize="464,312.4" sap2010:WorkflowViewState.IdRef="If_3">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <If.Then>
+                      <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into - Dependent age" EmptyField="False" sap:VirtualizedContainerService.HintSize="314,134" sap2010:WorkflowViewState.IdRef="TypeInto_6" SendWindowMessages="False" SimulateType="True" Text="[Dependentrow.Item(&quot;Dependent&quot;+DependentCount.ToString).ToString]">
+                        <ui:TypeInto.Target>
+                          <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9b7fd66c87847a3c2b697dc243802e54" Selector="[DependentSelector]" WaitForReady="INTERACTIVE" />
+                        </ui:TypeInto.Target>
+                      </ui:TypeInto>
+                    </If.Then>
+                  </If>
+                </Sequence>
+              </DoWhile>
+              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - dependent submit button" sap:VirtualizedContainerService.HintSize="511.6,106" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="971c54c3ea29d0c0cf793a84290de9a4" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_subbtn' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                </ui:Click.Target>
+              </ui:Click>
+              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="" ClickType="CLICK_SINGLE" DisplayName="Click:  OK " sap:VirtualizedContainerService.HintSize="511.6,134.4" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                <ui:Click.CursorPosition>
+                  <ui:CursorPosition Position="Center">
+                    <ui:CursorPosition.OffsetX>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetX>
+                    <ui:CursorPosition.OffsetY>
+                      <InArgument x:TypeArguments="x:Int32" />
+                    </ui:CursorPosition.OffsetY>
+                  </ui:CursorPosition>
+                </ui:Click.CursorPosition>
+                <ui:Click.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="abc22eff05da1c31cb28ee98bc0308aa" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;ctrl role='dialog' /&gt;&lt;ctrl name='OK' /&gt;" WaitForReady="COMPLETE" />
+                </ui:Click.Target>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:Click>
+              <ui:SendHotkey DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Hotkey- to  enter key" EmptyField="False" sap:VirtualizedContainerService.HintSize="464,117.6" sap2010:WorkflowViewState.IdRef="SendHotkey_1" Key="enter" KeyModifiers="None" SendWindowMessages="False" SpecialKey="True">
+                <ui:SendHotkey.Target>
+                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Selector="{x:Null}" TimeoutMS="{x:Null}" WaitForReady="INTERACTIVE" />
+                </ui:SendHotkey.Target>
+              </ui:SendHotkey>
+              <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="464,52.4" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                <ui:CommentOut.Body>
+                  <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="336,230" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Continue" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                      <ui:Click.CursorPosition>
+                        <ui:CursorPosition Position="Center">
+                          <ui:CursorPosition.OffsetX>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetX>
+                          <ui:CursorPosition.OffsetY>
+                            <InArgument x:TypeArguments="x:Int32" />
+                          </ui:CursorPosition.OffsetY>
+                        </ui:CursorPosition>
+                      </ui:Click.CursorPosition>
+                      <ui:Click.Target>
+                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="88ac8f8cfaeccf138a47ecc913ebcb9d" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_cont' tag='BUTTON' aaname='Continue' /&gt;" WaitForReady="INTERACTIVE" />
+                      </ui:Click.Target>
+                    </ui:Click>
+                  </Sequence>
+                </ui:CommentOut.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:CommentOut>
+            </Sequence>
+          </Sequence>
+        </ActivityAction>
+      </ui:ForEachRow.Body>
+    </ui:ForEachRow>
+    <Sequence DisplayName="Disconnect DB" sap:VirtualizedContainerService.HintSize="537.6,52.4" sap2010:WorkflowViewState.IdRef="Sequence_11">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:DatabaseDisconnect DatabaseConnection="[DBConnection]" DisplayName="Disconnect- DB connection" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="DatabaseDisconnect_1" />
+    </Sequence>
+  </Sequence>
+</Activity>

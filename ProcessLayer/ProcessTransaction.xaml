@@ -1,0 +1,752 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ProcessTransaction" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:si="clr-namespace:System.IO;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="inout_TransactionItem" Type="InOutArgument(ui:QueueItem)" />
+    <x:Property Name="inout_Config" Type="InOutArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="out_BusinessRuleException" Type="OutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="out_SystemException" Type="OutArgument(s:Exception)" />
+    <x:Property Name="out_DT_Log" Type="OutArgument(sd:DataTable)" />
+    <x:Property Name="in_DT_Parameter" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="out_NoRecords" Type="OutArgument(x:Boolean)" />
+    <x:Property Name="in_wbParentPath" Type="InArgument(x:String)" />
+    <x:Property Name="in_RetryNumber" Type="InArgument(x:Int32)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>970.4,3078.8</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="44">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="40">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:Annotation.AnnotationText="##Business Process Layer##&#xA;Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. &#xA;" DisplayName="ProcessTransaction" sap:VirtualizedContainerService.HintSize="930.4,2998.8" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="Department" />
+      <Variable x:TypeArguments="x:String" Name="Category" />
+      <Variable x:TypeArguments="x:String" Default="[Directory.GetCurrentDirectory]" Name="SavedCurrentDirectory" />
+      <Variable x:TypeArguments="x:String" Name="wbPath" />
+      <Variable x:TypeArguments="x:String" Name="wbName" />
+      <Variable x:TypeArguments="s:DateTime" Name="wbStartTime" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Sequence sap2010:Annotation.AnnotationText="During block startup, information about the path are constructed. It will be passed to any child workblock.&#xA;You should also publish the input arguments that you want to make available in the log" DisplayName="wbStartup" sap:VirtualizedContainerService.HintSize="908.4,212" sap2010:WorkflowViewState.IdRef="Sequence_19">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Assign sap2010:Annotation.AnnotationText="Edit to assign a name of your choosing" DisplayName="Assign workblock its name" sap:VirtualizedContainerService.HintSize="314,104.4" sap2010:WorkflowViewState.IdRef="Assign_39">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[wbName]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">ProcessTransaction</InArgument>
+        </Assign.Value>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </Assign>
+      <Assign sap2010:Annotation.AnnotationText="Create current workblock path. This will be passed to children wb, if any" DisplayName="Create workblock path" sap:VirtualizedContainerService.HintSize="314,104.4" sap2010:WorkflowViewState.IdRef="Assign_40">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[wbPath]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">[if (string.IsNullOrEmpty(in_wbParentPath), wbName, in_wbParentPath+"|"+wbName)]</InArgument>
+        </Assign.Value>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </Assign>
+      <Assign sap2010:Annotation.AnnotationText="Assign template start time. " DisplayName="Assign start time" sap:VirtualizedContainerService.HintSize="314,88" sap2010:WorkflowViewState.IdRef="Assign_41">
+        <Assign.To>
+          <OutArgument x:TypeArguments="s:DateTime">[wbStartTime]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="s:DateTime">[datetime.Now]</InArgument>
+        </Assign.Value>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </Assign>
+      <ui:AddLogFields sap2010:Annotation.AnnotationText="Default wb fields&#xA;wbName&#xA;wbParentName&#xA;wbKey&#xA;wbPath&#xA;wbLevel&#xA;wbStartTime&#xA;wbState" DisplayName="Publish default wb fields" sap:VirtualizedContainerService.HintSize="314,165.2" sap2010:WorkflowViewState.IdRef="AddLogFields_1">
+        <ui:AddLogFields.Fields>
+          <InArgument x:TypeArguments="x:String" x:Key="wbName">[wbName]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="wbParentName">[if(wbPath.Count(Function(x) x="|") = 0, string.Empty, wbPath.Split("|".ToCharArray)(wbPath.Count(Function(x) x="|")-1))]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="wbKey">[Guid.NewGuid.ToString]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="wbPath">[wbPath]</InArgument>
+          <InArgument x:TypeArguments="x:Int32" x:Key="wbLevel">[wbPath.Count(Function(x) x="|")]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="wbState">Executing</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="wbStartTime">[wbStartTime.ToString("yyyyMMdd HH:mm:ss.fff")]</InArgument>
+        </ui:AddLogFields.Fields>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:AddLogFields>
+      <ui:AddLogFields sap2010:Annotation.AnnotationText="Publish input fields&#xA;wbRetriesLeft" DisplayName="Add log fields" sap:VirtualizedContainerService.HintSize="314,66.8" sap2010:WorkflowViewState.IdRef="AddLogFields_2">
+        <ui:AddLogFields.Fields>
+          <InArgument x:TypeArguments="x:Int32" x:Key="wbRetriesLeft">[cint(inout_Config.Item("MaxRetryNumber"))-in_RetryNumber]</InArgument>
+        </ui:AddLogFields.Fields>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:AddLogFields>
+      <ui:LogMessage DisplayName="Log execution started message" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Info" Message="[wbPath + &quot; execution started.&quot;]" />
+    </Sequence>
+    <Assign DisplayName="Assign- Department" sap:VirtualizedContainerService.HintSize="908.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[Department]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("Department").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign- Category" sap:VirtualizedContainerService.HintSize="908.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[Category]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("Category").ToString]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Sequence sap2010:Annotation.AnnotationText="Get Asset - Global_DEMi_Parameter  to fetch QueueName value." DisplayName="Get Asset and Set input Arguments" sap:VirtualizedContainerService.HintSize="908.4,161.6" sap2010:WorkflowViewState.IdRef="Sequence_5">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:String" Name="rawJSONString" />
+        <Variable x:TypeArguments="sd:DataRow" Name="rowDT_Parameter" />
+      </Sequence.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </Sequence>
+    <Switch x:TypeArguments="x:String" DisplayName="Switch to select Department" Expression="[if( Department= &quot;Verify&quot;, &quot;Verify&quot;, if( Department= &quot;Transaction&quot;, &quot;Transaction&quot;, if( Department=&quot;IntermediaryChannel&quot;, &quot;IntermediaryChannel&quot;, &quot;Default&quot;) ) )]" sap:VirtualizedContainerService.HintSize="908.4,2144.4" sap2010:WorkflowViewState.IdRef="Switch`1_2">
+      <Switch x:TypeArguments="x:String" x:Key="Verify" DisplayName="Switch to select the Category - Verify Department" Expression="[if( Category= &quot;VAC&quot;, &quot;VAC&quot;, &quot;Default&quot;)]" sap:VirtualizedContainerService.HintSize="477.6,247.6" sap2010:WorkflowViewState.IdRef="Switch`1_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <ui:CommentOut x:Key="VAC" DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="415.6,835.2" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+          <ui:CommentOut.Body>
+            <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="358,757.6" sap2010:WorkflowViewState.IdRef="Sequence_8">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Sequence DisplayName="VAC Process" sap:VirtualizedContainerService.HintSize="336,633.6" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;DEMi Performer: Executing Verify Account Closure, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessVAC workflow" sap:VirtualizedContainerService.HintSize="314,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Department\Verify\VAC\ProcessVAC.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+                    <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+                    <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                    <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="314,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_4" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+                  <ui:InvokeWorkflowFile.Arguments>
+                    <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+                    <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+                  </ui:InvokeWorkflowFile.Arguments>
+                </ui:InvokeWorkflowFile>
+                <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="RefNo" DataTable="[out_DT_Log]" DisplayName="Add Data Column" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_4" MaxLength="100" Unique="False" />
+                <Assign DisplayName="Assign- Queue item Ref No" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("RefNo")]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("RefNo").ToString]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </Sequence>
+          </ui:CommentOut.Body>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </ui:CommentOut>
+      </Switch>
+      <Switch x:TypeArguments="x:String" x:Key="Transaction" DisplayName="Switch to select the category - Department Transaction" Expression="[if( Category= &quot;RRQ&quot;, &quot;RRQ&quot;, if( Category= &quot;PIRPSC&quot;, &quot;PIRPSC&quot;, if( Category= &quot;RRBP&quot;, &quot;RRBP&quot;, if( Category= &quot;OTUDA&quot;, &quot;OTUDA&quot;, if( Category= &quot;MCHO&quot;, &quot;MCHO&quot;, &quot;Default&quot; ) ) ) ) )]" sap:VirtualizedContainerService.HintSize="1022,1490.8" sap2010:WorkflowViewState.IdRef="Switch`1_4">
+        <Sequence x:Key="RRQ" DisplayName="RRQ Process" sap:VirtualizedContainerService.HintSize="336,1370.4" sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:Double" Name="availableBalance" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Process RRQ" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;DEMi Performer: Executing Repair Reject Queue, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessRRQ workflow" sap:VirtualizedContainerService.HintSize="314,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Department\Transaction\RRQ\ProcessRRQ.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+              <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+              <OutArgument x:TypeArguments="x:Double" x:Key="out_availBalance">[availableBalance]</OutArgument>
+              <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DT_Parameter">[in_DT_Parameter]</InArgument>
+              <OutArgument x:TypeArguments="x:Boolean" x:Key="out_NoRecords">[out_NoRecords]</OutArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <InvokeMethod sap2010:Annotation.AnnotationText="Fx for the below mentioned System error:.&#xA;&quot;Invoke workflow: Could not find a part of the path&quot;." DisplayName="Invoke Method- Set System IO Directory" sap:VirtualizedContainerService.HintSize="314,212" sap2010:WorkflowViewState.IdRef="InvokeMethod_2" MethodName="SetCurrentDirectory" TargetType="si:Directory">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <InArgument x:TypeArguments="x:String">[SavedCurrentDirectory]</InArgument>
+          </InvokeMethod>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="314,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_5" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="PaymentOrderId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- PaymentOrder ID" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_23" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="RejectReason" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Reject reason" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_2" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:Double" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="Amount" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Amount" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_7" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:Double" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="AvailableBalance" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Available Balance" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_6" MaxLength="-1" Unique="False" />
+          <Assign DisplayName="Assign- Queue item payment Order ID " sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_4">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("PaymentOrderId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">["'"+inout_TransactionItem.SpecificContent("PaymentOrderId").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Reject Reason " sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_5">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("RejectReason")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("RejectReason").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Amount" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_7">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("Amount")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Double">[Convert.ToDouble(inout_TransactionItem.SpecificContent("Amount").ToString)]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Available Balance" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_6">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("AvailableBalance")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Object">[availableBalance]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+        <Sequence x:Key="PIRPSC" DisplayName="Process PIRPSC" sap:VirtualizedContainerService.HintSize="364.4,1692" sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Name="OrgPymntRefNo" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Process PIRPSC" sap:VirtualizedContainerService.HintSize="342.4,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;DEMi Performer: Executing Repair Reject Queue, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessPIRPSC workflow" sap:VirtualizedContainerService.HintSize="342.4,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_6" UnSafe="False" WorkflowFileName="Department\Transaction\PIRPSC\ProcessPIRPSC.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+              <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+              <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DT_Parameter">[in_DT_Parameter]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_OrgPymntRefNo">[OrgPymntRefNo]</OutArgument>
+              <OutArgument x:TypeArguments="x:Boolean" x:Key="out_NoRecords">[out_NoRecords]</OutArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <InvokeMethod sap2010:Annotation.AnnotationText="Fx for the below mentioned System error:.&#xA;&quot;Invoke workflow: Could not find a part of the path&quot;." DisplayName="Invoke Method- Set System IO Directory" sap:VirtualizedContainerService.HintSize="342.4,212" sap2010:WorkflowViewState.IdRef="InvokeMethod_1" MethodName="SetCurrentDirectory" TargetType="si:Directory">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <InArgument x:TypeArguments="x:String">[SavedCurrentDirectory]</InArgument>
+          </InvokeMethod>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="342.4,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:AddDataColumn x:TypeArguments="x:Int32" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="PaymentReferenceNo" DataTable="[out_DT_Log]" DisplayName="Add Data Column- PaymentReferenceNo" sap:VirtualizedContainerService.HintSize="342.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_8" MaxLength="100" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="ServiceID" DataTable="[out_DT_Log]" DisplayName="Add Data Column- ServiceID" sap:VirtualizedContainerService.HintSize="342.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_9" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:Double" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="Amount" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Amount" sap:VirtualizedContainerService.HintSize="342.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_10" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="CreditorAccountID" DataTable="[out_DT_Log]" DisplayName="Add Data Column Creditor A/C ID" sap:VirtualizedContainerService.HintSize="342.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_15" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="DebtorAccountID" DataTable="[out_DT_Log]" DisplayName="Add Data Column-Debtor A/C ID" sap:VirtualizedContainerService.HintSize="342.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_16" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="OrgPymntRefNo" DataTable="[out_DT_Log]" DisplayName="Add Data Column- OrgPymntRefNo" sap:VirtualizedContainerService.HintSize="342.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_14" MaxLength="-1" Unique="False" />
+          <Assign DisplayName="Assign- Queue item Payment Ref No" sap:VirtualizedContainerService.HintSize="342.4,58" sap2010:WorkflowViewState.IdRef="Assign_8">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("PaymentReferenceNo")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">[Convert.ToInt32(inout_TransactionItem.SpecificContent("PaymentReferenceNo").ToString)]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Service ID" sap:VirtualizedContainerService.HintSize="342.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_9">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("ServiceID")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("ServiceID").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Amount" sap:VirtualizedContainerService.HintSize="342.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_10">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("Amount")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Double">[Convert.ToDouble(inout_TransactionItem.SpecificContent("Amount").ToString.Split({"|"}, StringSplitOptions.None)(0))]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Creditor A/C ID" sap:VirtualizedContainerService.HintSize="342.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_11">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("CreditorAccountID")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("CreditorAccountID").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Debtor A/C ID" sap:VirtualizedContainerService.HintSize="342.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_12">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("DebtorAccountID")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("DebtorAccountID").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item OrgPymntRefNo" sap:VirtualizedContainerService.HintSize="342.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_13">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("OrgPymntRefNo")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Object">[OrgPymntRefNo]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+        <Sequence x:Key="RRBP" DisplayName="RRBP Process" sap:VirtualizedContainerService.HintSize="344.4,1370.4" sap2010:WorkflowViewState.IdRef="Sequence_9">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:Double" Name="availableBalance" />
+            <Variable x:TypeArguments="x:String" Name="MemberId" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Process RRBP" sap:VirtualizedContainerService.HintSize="322.4,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;DEMi Performer: Executing Recall Or Return Bill Payments, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessRRBP workflow" sap:VirtualizedContainerService.HintSize="322.4,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_8" UnSafe="False" WorkflowFileName="Department\Transaction\RRBP\ProcessRRBP.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+              <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+              <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DT_Parameter">[in_DT_Parameter]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_MemberId">[MemberId]</OutArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <InvokeMethod sap2010:Annotation.AnnotationText="Fx for the below mentioned System error:.&#xA;&quot;Invoke workflow: Could not find a part of the path&quot;." DisplayName="Invoke Method- Set System IO Directory" sap:VirtualizedContainerService.HintSize="322.4,212" sap2010:WorkflowViewState.IdRef="InvokeMethod_3" MethodName="SetCurrentDirectory" TargetType="si:Directory">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <InArgument x:TypeArguments="x:String">[SavedCurrentDirectory]</InArgument>
+          </InvokeMethod>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="322.4,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_9" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="MemberId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Member Id" sap:VirtualizedContainerService.HintSize="322.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_21" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="TransactionRefNo" DataTable="[out_DT_Log]" DisplayName="Add Data Column- TransactionRefNo" sap:VirtualizedContainerService.HintSize="322.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_18" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="BillerCode" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Biller Code" sap:VirtualizedContainerService.HintSize="322.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_22" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:Double" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="Amount" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Amount" sap:VirtualizedContainerService.HintSize="322.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_19" MaxLength="-1" Unique="False" />
+          <Assign DisplayName="Assign- Queue item MemberId" sap:VirtualizedContainerService.HintSize="322.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_14">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("MemberId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[MemberId]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item TransactioRefNo" sap:VirtualizedContainerService.HintSize="322.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_15">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("TransactionRefNo")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">["'"+inout_TransactionItem.SpecificContent("TransactionRefNo").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Biller Code" sap:VirtualizedContainerService.HintSize="322.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_16">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("BillerCode")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Object">[inout_TransactionItem.SpecificContent("BillerCode").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Amount" sap:VirtualizedContainerService.HintSize="322.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_17">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("Amount")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Double">[Convert.ToDouble(inout_TransactionItem.SpecificContent("Amount").ToString)]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+        <Sequence x:Key="OTUDA" sap2010:Annotation.AnnotationText="Open Top Up Deposit Account" DisplayName="OTUDA" sap:VirtualizedContainerService.HintSize="624.8,1968" sap2010:WorkflowViewState.IdRef="Sequence_10">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Default="[String.Empty]" Name="MemberId" />
+            <Variable x:TypeArguments="x:String" Name="TermDepositAccountId" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Process OTUDA" sap:VirtualizedContainerService.HintSize="602.8,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Info" Message="[&quot;DEMi Performer: Executing Open Term Deposit Account, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessOTUDA workflow" sap:VirtualizedContainerService.HintSize="602.8,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_10" UnSafe="False" WorkflowFileName="Department\Transaction\OTUDA\ProcessOTUDA.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+              <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+              <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DT_Parameter">[in_DT_Parameter]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_MemberId">[MemberId]</OutArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_TermDepositAccountId">[TermDepositAccountId]</OutArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <InvokeMethod sap2010:Annotation.AnnotationText="Fx for the below mentioned System error:.&#xA;&quot;Invoke workflow: Could not find a part of the path&quot;." DisplayName="Invoke Method- Set System IO Directory" sap:VirtualizedContainerService.HintSize="602.8,212" sap2010:WorkflowViewState.IdRef="InvokeMethod_4" MethodName="SetCurrentDirectory" TargetType="si:Directory">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <InArgument x:TypeArguments="x:String">[SavedCurrentDirectory]</InArgument>
+          </InvokeMethod>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="602.8,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_11" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="ApplicationId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Application Id" sap:VirtualizedContainerService.HintSize="602.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_26" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="AccountName" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Account name" sap:VirtualizedContainerService.HintSize="602.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_25" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="MemberId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Member Id" sap:VirtualizedContainerService.HintSize="602.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_24" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="IsPrimary" DataTable="[out_DT_Log]" DisplayName="Add Data Column- IsPrimary" sap:VirtualizedContainerService.HintSize="602.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_28" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="TermDepositAccountId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- TermDeposit Account Id" sap:VirtualizedContainerService.HintSize="602.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_27" MaxLength="-1" Unique="False" />
+          <Assign DisplayName="Assign- Queue item Application Id" sap:VirtualizedContainerService.HintSize="602.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_19">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("ApplicationId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("ApplicationId").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <If Condition="[inout_TransactionItem.SpecificContent(&quot;MemberType&quot;).ToString = &quot;Personal&quot;]" DisplayName="If- MemberType Personal/NonPersonal" sap:VirtualizedContainerService.HintSize="602.8,467.2" sap2010:WorkflowViewState.IdRef="If_1">
+            <If.Then>
+              <Assign DisplayName="Assign- Queue item First Name" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_20">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("AccountName")]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("FirstName").ToString]</InArgument>
+                </Assign.Value>
+              </Assign>
+            </If.Then>
+            <If.Else>
+              <Sequence DisplayName="Non-Personal" sap:VirtualizedContainerService.HintSize="336,317.2" sap2010:WorkflowViewState.IdRef="Sequence_11">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:LogMessage DisplayName="Log Message- CorporateName" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;*********&quot;+inout_TransactionItem.SpecificContent(&quot;CorporateName&quot;).ToString]" />
+                <Assign DisplayName="Assign- Queue item Corporate Name" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_21">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("AccountName")]</OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("CorporateName").ToString]</InArgument>
+                  </Assign.Value>
+                </Assign>
+              </Sequence>
+            </If.Else>
+          </If>
+          <Assign DisplayName="Assign- Queue item MemberId" sap:VirtualizedContainerService.HintSize="602.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_18">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("MemberId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[MemberId]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item IsPrimary" sap:VirtualizedContainerService.HintSize="602.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_23">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("IsPrimary")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("IsPrimary").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item TermDeposit Account Id" sap:VirtualizedContainerService.HintSize="602.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_22">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("TermDepositAccountId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Object">[TermDepositAccountId]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+        <Sequence x:Key="MCHO" DisplayName="MCHO Process" sap:VirtualizedContainerService.HintSize="360.4,1208.8" sap2010:WorkflowViewState.IdRef="Sequence_18">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:Double" Name="availableBalance" />
+            <Variable x:TypeArguments="x:String" Name="MemberId" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Process MCHO" sap:VirtualizedContainerService.HintSize="338.4,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;DEMi Performer: Executing MCHO, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessRRBP workflow" sap:VirtualizedContainerService.HintSize="338.4,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_16" UnSafe="False" WorkflowFileName="Department\Transaction\MCHO\ProcessMCHO.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+              <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+              <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DT_Parameter">[in_DT_Parameter]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <InvokeMethod sap2010:Annotation.AnnotationText="Fx for the below mentioned System error:.&#xA;&quot;Invoke workflow: Could not find a part of the path&quot;." DisplayName="Invoke Method- Set System IO Directory" sap:VirtualizedContainerService.HintSize="338.4,212" sap2010:WorkflowViewState.IdRef="InvokeMethod_7" MethodName="SetCurrentDirectory" TargetType="si:Directory">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <InArgument x:TypeArguments="x:String">[SavedCurrentDirectory]</InArgument>
+          </InvokeMethod>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="338.4,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_17" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="PAN" DataTable="[out_DT_Log]" DisplayName="Add Data Column- PAN card number" sap:VirtualizedContainerService.HintSize="338.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_39" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="MemberId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Member Id" sap:VirtualizedContainerService.HintSize="338.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_40" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="TransactionRefNo" DataTable="[out_DT_Log]" DisplayName="Add Data Column- TransactionRefNo" sap:VirtualizedContainerService.HintSize="338.4,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_41" MaxLength="-1" Unique="False" />
+          <Assign DisplayName="Assign- Queue item MemberId" sap:VirtualizedContainerService.HintSize="338.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_36">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("MemberId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("MemberId").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item TransactioRefNo" sap:VirtualizedContainerService.HintSize="338.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_37">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("TransactionRefNo")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">["'"+inout_TransactionItem.SpecificContent("ReferenceNo").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item PAN" sap:VirtualizedContainerService.HintSize="338.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_38">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("PAN")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("PAN").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </Switch>
+      <Switch x:TypeArguments="x:String" x:Key="IntermediaryChannel" DisplayName="Switch- Select Category, Department- IntermediaryChannel" Expression="[if( Category= &quot;CRCAN&quot;, &quot;CRCAN&quot;, &quot;Default&quot;)]" sap:VirtualizedContainerService.HintSize="477.6,1909.6" sap2010:WorkflowViewState.IdRef="Switch`1_5">
+        <Sequence x:Key="CRCAN" sap2010:Annotation.AnnotationText="Loan origination process" DisplayName="CRCAN" sap:VirtualizedContainerService.HintSize="380.8,1722" sap2010:WorkflowViewState.IdRef="Sequence_16">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Default="[String.Empty]" Name="MemberId" />
+            <Variable x:TypeArguments="x:String" Name="TermDepositAccountId" />
+            <Variable x:TypeArguments="x:String" Name="LoanAppNumber" />
+          </Sequence.Variables>
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <ui:LogMessage DisplayName="Log Message- Process CRCAN" sap:VirtualizedContainerService.HintSize="358.8,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;DEMi Performer: Executing loan origination process, Department: &quot;+ Department + &quot; Category: &quot; + Category]" />
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke ProcessCRCAN workflow" sap:VirtualizedContainerService.HintSize="358.8,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_14" UnSafe="False" WorkflowFileName="Department\IntermediaryChannel\CRCAN\ProcessCRCAN.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="s:Exception" x:Key="out_SystemException">[out_SystemException]</OutArgument>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException" x:Key="out_BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">[inout_Config]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_MemberId">[MemberId]</OutArgument>
+              <InArgument x:TypeArguments="sd:DataTable" x:Key="in_DT_Parameter">[in_DT_Parameter]</InArgument>
+              <OutArgument x:TypeArguments="x:String" x:Key="out_LoanAppNumber">[LoanAppNumber]</OutArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <InvokeMethod sap2010:Annotation.AnnotationText="Fx for the below mentioned System error:.&#xA;&quot;Invoke workflow: Could not find a part of the path&quot;." DisplayName="Invoke Method- Set System IO Directory" sap:VirtualizedContainerService.HintSize="358.8,212" sap2010:WorkflowViewState.IdRef="InvokeMethod_6" MethodName="SetCurrentDirectory" TargetType="si:Directory">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <InArgument x:TypeArguments="x:String">[SavedCurrentDirectory]</InArgument>
+          </InvokeMethod>
+          <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke CreateTransactionLogDT workflow" sap:VirtualizedContainerService.HintSize="358.8,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_15" UnSafe="False" WorkflowFileName="Framework\CreateTransactionLogDT.xaml">
+            <ui:InvokeWorkflowFile.Arguments>
+              <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Log">[out_DT_Log]</OutArgument>
+              <InArgument x:TypeArguments="ui:QueueItem" x:Key="in_TransactionItem">[inout_TransactionItem]</InArgument>
+            </ui:InvokeWorkflowFile.Arguments>
+          </ui:InvokeWorkflowFile>
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="ApplicationId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Application Id" sap:VirtualizedContainerService.HintSize="358.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_33" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="AccountName" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Account name" sap:VirtualizedContainerService.HintSize="358.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_34" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="LastName" DataTable="[out_DT_Log]" DisplayName="Add Data Column- LastName" sap:VirtualizedContainerService.HintSize="358.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_38" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="MemberId" DataTable="[out_DT_Log]" DisplayName="Add Data Column- Member Id" sap:VirtualizedContainerService.HintSize="358.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_35" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="IsPrimary" DataTable="[out_DT_Log]" DisplayName="Add Data Column- IsPrimary" sap:VirtualizedContainerService.HintSize="358.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_36" MaxLength="-1" Unique="False" />
+          <ui:AddDataColumn x:TypeArguments="x:String" Column="{x:Null}" DefaultValue="{x:Null}" AllowDBNull="True" AutoIncrement="False" ColumnName="LoanAppNumber" DataTable="[out_DT_Log]" DisplayName="Add Data Column- LoanAppNumber" sap:VirtualizedContainerService.HintSize="358.8,22" sap2010:WorkflowViewState.IdRef="AddDataColumn`1_37" MaxLength="-1" Unique="False" />
+          <Assign DisplayName="Assign- Queue item Application Id" sap:VirtualizedContainerService.HintSize="358.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_29">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("ApplicationId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("ApplicationId").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item First Name" sap:VirtualizedContainerService.HintSize="358.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_42">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("AccountName")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("FirstName").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Last Name" sap:VirtualizedContainerService.HintSize="358.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_43">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("LastName")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Object">[inout_TransactionItem.SpecificContent("LastName").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item MemberId" sap:VirtualizedContainerService.HintSize="358.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_32">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("MemberId")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[MemberId]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item IsPrimary" sap:VirtualizedContainerService.HintSize="358.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_33">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("IsPrimary")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[inout_TransactionItem.SpecificContent("IsPrimary").ToString]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign DisplayName="Assign- Queue item Loan App Number" sap:VirtualizedContainerService.HintSize="358.8,59.6" sap2010:WorkflowViewState.IdRef="Assign_34">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Object">[out_DT_Log.Rows(0).Item("LoanAppNumber")]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:String">[LoanAppNumber]</InArgument>
+            </Assign.Value>
+          </Assign>
+        </Sequence>
+      </Switch>
+    </Switch>
+  </Sequence>
+</Activity>

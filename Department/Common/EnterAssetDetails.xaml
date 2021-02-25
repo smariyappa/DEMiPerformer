@@ -1,0 +1,756 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="EnterAssetDetails" this:EnterAssetDetails.in_Config="[New System.Collections.Generic.Dictionary(Of string, object)]" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="out_SystemException" Type="OutArgument(s:Exception)" />
+    <x:Property Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property Name="out_BusinessRuleException" Type="OutArgument(ui:BusinessRuleException)" />
+    <x:Property Name="in_MemberId" Type="InArgument(x:String)" />
+    <x:Property Name="in_LoanAppNumber" Type="InArgument(x:String)" />
+    <x:Property Name="in_DT_AssetDetails" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>676,1652.8</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="EnterAssetDetails" sap:VirtualizedContainerService.HintSize="636,1572.8" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="ui:DatabaseConnection" Name="DBConnection" />
+      <Variable x:TypeArguments="x:String" Name="ConnectionString" />
+      <Variable x:TypeArguments="s:String[]" Name="Arr_RequiredFields" />
+      <Variable x:TypeArguments="sd:DataTable" Name="DT_AssetTable" />
+      <Variable x:TypeArguments="x:Boolean" Name="NoRecord" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <ui:LogMessage DisplayName="Log Message- Enter applicant Asset details" sap:VirtualizedContainerService.HintSize="614,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Start of add applicant Asset details.&quot;]" />
+    <Sequence DisplayName="Establish DB connection" sap:VirtualizedContainerService.HintSize="614,52.4" sap2010:WorkflowViewState.IdRef="Sequence_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:Replace DisplayName="Replace- DatabaseName" sap:VirtualizedContainerService.HintSize="314,59.2" sap2010:WorkflowViewState.IdRef="Replace_1" Input="[in_Config(&quot;Global_ConnectionString&quot;).ToString]" IsBuilderTabModified="False" Pattern="DatabaseName" RegexOption="IgnoreCase, Compiled" Replacement="[in_Config(&quot;Global_DB_DEMi&quot;).ToString]" Result="[ConnectionString]" />
+      <ui:DatabaseConnect DatabaseConnection="[DBConnection]" DisplayName="Connect- Supply Connection string " sap:VirtualizedContainerService.HintSize="314,59.2" sap2010:WorkflowViewState.IdRef="DatabaseConnect_1" ProviderName="System.Data.SqlClient" ConnectionString="[ConnectionString]" />
+    </Sequence>
+    <Assign DisplayName="Assign- Asset table" sap:VirtualizedContainerService.HintSize="614,59.6" sap2010:WorkflowViewState.IdRef="Assign_9">
+      <Assign.To>
+        <OutArgument x:TypeArguments="sd:DataTable">[DT_AssetTable]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="sd:DataTable">[New System.Data.DataTable]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Assign DisplayName="Assign- Asset required fields" sap:VirtualizedContainerService.HintSize="614,59.6" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="s:String[]">[Arr_RequiredFields]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="s:String[]">[{"AssetType","Asset"}]</InArgument>
+      </Assign.Value>
+    </Assign>
+    <Pick sap2010:Annotation.AnnotationText="Extract Asset table" DisplayName="Pick- Error/Applicant Asset details" sap:VirtualizedContainerService.HintSize="614,80.8" sap2010:WorkflowViewState.IdRef="Pick_3">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <PickBranch DisplayName="PickBranch- Error" sap:VirtualizedContainerService.HintSize="365.6,639.2" sap2010:WorkflowViewState.IdRef="PickBranch_5">
+        <PickBranch.Trigger>
+          <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_3" />
+        </PickBranch.Trigger>
+        <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,379.2" sap2010:WorkflowViewState.IdRef="Sequence_12">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+          <Assign DisplayName="Assign- Error" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_5">
+            <Assign.To>
+              <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Cannot find application asset details.")]</InArgument>
+            </Assign.Value>
+          </Assign>
+          <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Error" Message="[out_BusinessRuleException.Message]" />
+          <Throw DisplayName="Throw- Error" Exception="[out_BusinessRuleException]" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Throw_2" />
+        </Sequence>
+      </PickBranch>
+      <PickBranch DisplayName="PickBranch- Applicant asset Details" sap:VirtualizedContainerService.HintSize="343.6,639.2" sap2010:WorkflowViewState.IdRef="PickBranch_6">
+        <PickBranch.Trigger>
+          <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists- Applicant asset Details" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_3">
+            <ui:UiElementExists.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a5816f336abaf99694517d86fd0c169f" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl tag='H1' aaname='Applicant Asset Details' id='usecaseTitle' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+            </ui:UiElementExists.Target>
+          </ui:UiElementExists>
+        </PickBranch.Trigger>
+        <Sequence DisplayName="Application asset Details" sap:VirtualizedContainerService.HintSize="200,100.4" sap2010:WorkflowViewState.IdRef="Sequence_13">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+        </Sequence>
+      </PickBranch>
+    </Pick>
+    <ui:UiElementExists DisplayName="Element Exists- No records to display" Exists="[NoRecord]" sap:VirtualizedContainerService.HintSize="614,106" sap2010:WorkflowViewState.IdRef="UiElementExists_4">
+      <ui:UiElementExists.Target>
+        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="20080ba2dd9592db9c261d212ecc4989" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl aaname='There are no records to display.' parentid='_finDGrid1' tag='DIV' /&gt;" TimeoutMS="3000" WaitForReady="INTERACTIVE" />
+      </ui:UiElementExists.Target>
+    </ui:UiElementExists>
+    <Flowchart sap2010:Annotation.AnnotationText="If existing member has asset details already, throw BR exception." DisplayName="Existing member has asset details?" sap:VirtualizedContainerService.HintSize="614,664.4" sap2010:WorkflowViewState.IdRef="Flowchart_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+          <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+          <av:PointCollection x:Key="ConnectorLocation">300,77.7 300,116.4</av:PointCollection>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Flowchart.StartNode>
+        <x:Reference>__ReferenceID7</x:Reference>
+      </Flowchart.StartNode>
+      <FlowDecision x:Name="__ReferenceID7" Condition="[NoRecord]" DisplayName="No Records?" sap:VirtualizedContainerService.HintSize="72.8,87.2" sap2010:WorkflowViewState.IdRef="FlowDecision_3">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <av:Point x:Key="ShapeLocation">263.6,116.4</av:Point>
+            <av:Size x:Key="ShapeSize">72.8,87.2</av:Size>
+            <av:PointCollection x:Key="FalseConnector">336.4,160 460,160 460,263.8</av:PointCollection>
+            <av:PointCollection x:Key="TrueConnector">263.6,160 140,160 140,243.8</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+        <FlowDecision.True>
+          <FlowStep x:Name="__ReferenceID6">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <av:Point x:Key="ShapeLocation">40,243.8</av:Point>
+                <av:Size x:Key="ShapeSize">200,80.8</av:Size>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Sequence sap2010:Annotation.AnnotationText="Add financial details." DisplayName="No records to display" sap:VirtualizedContainerService.HintSize="200,80.8" sap2010:WorkflowViewState.IdRef="Sequence_17">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:LogMessage DisplayName="Log Message- No records to display" sap:VirtualizedContainerService.HintSize="936.8,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_9" Level="Info" Message="[&quot;No records to display, enter asset details.&quot;]" />
+              <ui:ForEachRow CurrentIndex="{x:Null}" DataTable="[in_DT_AssetDetails]" DisplayName="For Each Row- Asset DataTable" sap:VirtualizedContainerService.HintSize="936.8,3266" sap2010:WorkflowViewState.IdRef="ForEachRow_1">
+                <ui:ForEachRow.Body>
+                  <ActivityAction x:TypeArguments="sd:DataRow">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="sd:DataRow" Name="Assetrow" />
+                    </ActivityAction.Argument>
+                    <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="907.2,3117.6" sap2010:WorkflowViewState.IdRef="Sequence_29">
+                      <Sequence.Variables>
+                        <Variable x:TypeArguments="x:Boolean" Name="IsContinueActive" />
+                      </Sequence.Variables>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                      <Assign DisplayName="Assign- Continue flag" sap:VirtualizedContainerService.HintSize="885.2,59.6" sap2010:WorkflowViewState.IdRef="Assign_10">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Boolean">[IsContinueActive]</OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Boolean">False</InArgument>
+                        </Assign.Value>
+                      </Assign>
+                      <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Validate required fields" DisplayName="For Each - validate required fields" sap:VirtualizedContainerService.HintSize="885.2,80.8" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[Arr_RequiredFields]">
+                        <ui:ForEach.Body>
+                          <ActivityAction x:TypeArguments="x:String">
+                            <ActivityAction.Argument>
+                              <DelegateInArgument x:TypeArguments="x:String" Name="column" />
+                            </ActivityAction.Argument>
+                            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="486,653.2" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <If Condition="[String.IsNullOrEmpty(AssetRow.Item(column).ToString)]" sap:VirtualizedContainerService.HintSize="464,529.2" sap2010:WorkflowViewState.IdRef="If_3">
+                                <If.Then>
+                                  <Sequence DisplayName="Required field missing" sap:VirtualizedContainerService.HintSize="336,379.2" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                                    <sap:WorkflowViewStateService.ViewState>
+                                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      </scg:Dictionary>
+                                    </sap:WorkflowViewStateService.ViewState>
+                                    <ui:LogMessage DisplayName="Log Message- Required field missing" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_10" Level="Info" Message="[&quot;Application Id:&quot;+Assetrow.Item(column).ToString]" />
+                                    <Assign DisplayName="Assign- Continue flag" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_11">
+                                      <Assign.To>
+                                        <OutArgument x:TypeArguments="x:Boolean">[IsContinueActive]</OutArgument>
+                                      </Assign.To>
+                                      <Assign.Value>
+                                        <InArgument x:TypeArguments="x:Boolean">True</InArgument>
+                                      </Assign.Value>
+                                    </Assign>
+                                    <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_1" />
+                                  </Sequence>
+                                </If.Then>
+                              </If>
+                            </Sequence>
+                          </ActivityAction>
+                        </ui:ForEach.Body>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                      </ui:ForEach>
+                      <If Condition="[IsContinueActive]" DisplayName="If- Continue flag is active, process next record" sap:VirtualizedContainerService.HintSize="885.2,395.6" sap2010:WorkflowViewState.IdRef="If_4">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <If.Then>
+                          <Sequence DisplayName="Mandatory data missing" sap:VirtualizedContainerService.HintSize="264.4,245.6" sap2010:WorkflowViewState.IdRef="Sequence_31">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Assign DisplayName="Assign- BR exception" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_18">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Mandatory data missing, enter Asset details manually")]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <ui:Continue sap:VirtualizedContainerService.HintSize="242.4,22" sap2010:WorkflowViewState.IdRef="Continue_4" />
+                          </Sequence>
+                        </If.Then>
+                      </If>
+                      <Flowchart sap2010:Annotation.AnnotationText="Avoid duplicate entry&#xA;- Filter for the existing record in the table&#xA;- Skip if duplicate entry exists " DisplayName="Flowchart- Avoid duplicate entry" sap:VirtualizedContainerService.HintSize="885.2,130" sap2010:WorkflowViewState.IdRef="Flowchart_1">
+                        <Flowchart.Variables>
+                          <Variable x:TypeArguments="x:Boolean" Name="HasDuplicate" />
+                        </Flowchart.Variables>
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                            <av:Point x:Key="ShapeLocation">270,2.5</av:Point>
+                            <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+                            <av:PointCollection x:Key="ConnectorLocation">300,77.7 300,107.7 298.4,107.7 298.4,136.4</av:PointCollection>
+                            <x:Double x:Key="Width">640.80000000000007</x:Double>
+                            <x:Double x:Key="Height">707.20000000000027</x:Double>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <Flowchart.StartNode>
+                          <x:Reference>__ReferenceID4</x:Reference>
+                        </Flowchart.StartNode>
+                        <FlowDecision x:Name="__ReferenceID4" sap2010:Annotation.AnnotationText="DT_AssetTable row count &gt;0" Condition="[DT_AssetTable.Rows.Count &gt; 0]" DisplayName="Row count &gt; 0" sap:VirtualizedContainerService.HintSize="140.4,132" sap2010:WorkflowViewState.IdRef="FlowDecision_2">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              <av:Point x:Key="ShapeLocation">228.2,136.4</av:Point>
+                              <av:Size x:Key="ShapeSize">140.4,132</av:Size>
+                              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                              <av:PointCollection x:Key="FalseConnector">368.6,202.4 490,202.4 490,323.8</av:PointCollection>
+                              <av:PointCollection x:Key="TrueConnector">228.2,202.4 160,202.4 160,353.8</av:PointCollection>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <FlowDecision.True>
+                            <FlowStep x:Name="__ReferenceID1">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <av:Point x:Key="ShapeLocation">60,353.8</av:Point>
+                                  <av:Size x:Key="ShapeSize">200,80.8</av:Size>
+                                  <av:PointCollection x:Key="ConnectorLocation">260,394.2 294,394.2 294,496.4</av:PointCollection>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Sequence sap2010:Annotation.AnnotationText="Verify duplicate entry" DisplayName="Skip duplicate entry" sap:VirtualizedContainerService.HintSize="200,80.8" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                                <Sequence.Variables>
+                                  <Variable x:TypeArguments="x:String" Name="RawAsset" />
+                                  <Variable x:TypeArguments="x:String" Name="AssetConverted" />
+                                </Sequence.Variables>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Assign DisplayName="Assign-raw asset" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_12">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[RawAsset]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[Assetrow.Item("Asset").ToString]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <Assign DisplayName="Assign- asset converted" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_13">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[AssetConverted]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">[if(RawAsset.Split({"."}, StringSplitOptions.None).Length &gt; 1, RawAsset, RawAsset+".0")]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <Assign DisplayName="Assign - Duplicate flag" sap:VirtualizedContainerService.HintSize="242.4,59.6" sap2010:WorkflowViewState.IdRef="Assign_14">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Boolean">[HasDuplicate]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Boolean">[If(DT_AssetTable.Select("_dataCifId = '"+in_MemberId+"' AND _mkval = '"+AssetConverted+"' ").Length &gt;0, True, False)]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                              </Sequence>
+                              <FlowStep.Next>
+                                <FlowDecision x:Name="__ReferenceID2" Condition="[HasDuplicate]" DisplayName="Has Duplicate ?" sap:VirtualizedContainerService.HintSize="87.2,87.2" sap2010:WorkflowViewState.IdRef="FlowDecision_1">
+                                  <sap:WorkflowViewStateService.ViewState>
+                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                      <av:Point x:Key="ShapeLocation">250.4,496.4</av:Point>
+                                      <av:Size x:Key="ShapeSize">87.2,87.2</av:Size>
+                                      <av:PointCollection x:Key="TrueConnector">250.4,540 130,540 130,583.8</av:PointCollection>
+                                    </scg:Dictionary>
+                                  </sap:WorkflowViewStateService.ViewState>
+                                  <FlowDecision.True>
+                                    <FlowStep x:Name="__ReferenceID3">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <av:Point x:Key="ShapeLocation">30,583.8</av:Point>
+                                          <av:Size x:Key="ShapeSize">200,52.4</av:Size>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <Sequence DisplayName="Duplicate record, skip" sap:VirtualizedContainerService.HintSize="200,52.4" sap2010:WorkflowViewState.IdRef="Sequence_22">
+                                        <sap:WorkflowViewStateService.ViewState>
+                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                          </scg:Dictionary>
+                                        </sap:WorkflowViewStateService.ViewState>
+                                        <ui:LogMessage DisplayName="Log Message- duplicate record" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_11" Level="Info" Message="[&quot;Duplicate record-asset Id is &quot;+Assetrow.Item(&quot;id&quot;).ToString]" />
+                                        <ui:Continue sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Continue_3" />
+                                      </Sequence>
+                                    </FlowStep>
+                                  </FlowDecision.True>
+                                </FlowDecision>
+                              </FlowStep.Next>
+                            </FlowStep>
+                          </FlowDecision.True>
+                          <FlowDecision.False>
+                            <FlowStep x:Name="__ReferenceID0">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <av:Point x:Key="ShapeLocation">390,323.8</av:Point>
+                                  <av:Size x:Key="ShapeSize">200,97.2</av:Size>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Sequence sap2010:Annotation.AnnotationText="No records from the extracted table." DisplayName="No records " sap:VirtualizedContainerService.HintSize="200,97.2" sap2010:WorkflowViewState.IdRef="Sequence_23">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <ui:LogMessage DisplayName="Log Message- continue adding records" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_12" Level="Info" Message="[&quot;No records in the existing table.&quot;]" />
+                              </Sequence>
+                            </FlowStep>
+                          </FlowDecision.False>
+                        </FlowDecision>
+                        <x:Reference>__ReferenceID0</x:Reference>
+                        <x:Reference>__ReferenceID1</x:Reference>
+                        <x:Reference>__ReferenceID2</x:Reference>
+                        <x:Reference>__ReferenceID3</x:Reference>
+                      </Flowchart>
+                      <Pick sap2010:Annotation.AnnotationText="Maintain Applicant Asset Details" DisplayName="Pick- Error/Applicant Asset details" sap:VirtualizedContainerService.HintSize="885.2,97.2" sap2010:WorkflowViewState.IdRef="Pick_4">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <PickBranch DisplayName="PickBranch- Error" sap:VirtualizedContainerService.HintSize="365.6,639.2" sap2010:WorkflowViewState.IdRef="PickBranch_7">
+                          <PickBranch.Trigger>
+                            <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_4" />
+                          </PickBranch.Trigger>
+                          <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,379.2" sap2010:WorkflowViewState.IdRef="Sequence_24">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <Assign DisplayName="Assign- Error" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_15">
+                              <Assign.To>
+                                <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                              </Assign.To>
+                              <Assign.Value>
+                                <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Cannot find application asset details.")]</InArgument>
+                              </Assign.Value>
+                            </Assign>
+                            <ui:LogMessage DisplayName="Log Message- Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_13" Level="Error" Message="[out_BusinessRuleException.Message]" />
+                            <Throw DisplayName="Throw- Error" Exception="[out_BusinessRuleException]" sap:VirtualizedContainerService.HintSize="314,22" sap2010:WorkflowViewState.IdRef="Throw_3" />
+                          </Sequence>
+                        </PickBranch>
+                        <PickBranch DisplayName="PickBranch- Applicant asset Details" sap:VirtualizedContainerService.HintSize="365.6,639.2" sap2010:WorkflowViewState.IdRef="PickBranch_8">
+                          <PickBranch.Trigger>
+                            <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists- Applicant asset Details" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_5">
+                              <ui:UiElementExists.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="a5816f336abaf99694517d86fd0c169f" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl tag='H1' aaname='Applicant Asset Details' id='usecaseTitle' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                              </ui:UiElementExists.Target>
+                            </ui:UiElementExists>
+                          </PickBranch.Trigger>
+                          <Sequence DisplayName="Application asset Details" sap:VirtualizedContainerService.HintSize="336,230" sap2010:WorkflowViewState.IdRef="Sequence_25">
+                            <sap:WorkflowViewStateService.ViewState>
+                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              </scg:Dictionary>
+                            </sap:WorkflowViewStateService.ViewState>
+                            <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Add asset button" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                              <ui:Click.CursorPosition>
+                                <ui:CursorPosition Position="Center">
+                                  <ui:CursorPosition.OffsetX>
+                                    <InArgument x:TypeArguments="x:Int32" />
+                                  </ui:CursorPosition.OffsetX>
+                                  <ui:CursorPosition.OffsetY>
+                                    <InArgument x:TypeArguments="x:Int32" />
+                                  </ui:CursorPosition.OffsetY>
+                                </ui:CursorPosition>
+                              </ui:Click.CursorPosition>
+                              <ui:Click.Target>
+                                <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="f7aae58db4d619c28d103a88af2cf282" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_addRc' tag='BUTTON' aaname='Add' /&gt;" WaitForReady="INTERACTIVE" />
+                              </ui:Click.Target>
+                            </ui:Click>
+                          </Sequence>
+                        </PickBranch>
+                      </Pick>
+                      <Sequence DisplayName="Enter asset data to DEMi" sap:VirtualizedContainerService.HintSize="885.2,2030.4" sap2010:WorkflowViewState.IdRef="Sequence_28">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+                        <ui:SelectItem ContinueOnError="{x:Null}" DelayAfter="{x:Null}" DelayBefore="{x:Null}" DisplayName="Select Item - Asset Type" sap:VirtualizedContainerService.HintSize="863.2,134" sap2010:WorkflowViewState.IdRef="SelectItem_1" Item="[Assetrow.Item(&quot;AssetType&quot;).ToString]">
+                          <ui:SelectItem.Items>
+                            <scg:List x:TypeArguments="x:String" Capacity="16">
+                              <x:String>Select</x:String>
+                              <x:String>Vehicle</x:String>
+                              <x:String>Watercraft</x:String>
+                              <x:String>Savings</x:String>
+                              <x:String>Deposit Paid</x:String>
+                              <x:String>Contents</x:String>
+                              <x:String>Shares and Investments</x:String>
+                              <x:String>Gift</x:String>
+                              <x:String>Superannuation</x:String>
+                              <x:String>Real estate</x:String>
+                              <x:String>Others</x:String>
+                              <x:String>Caravan</x:String>
+                            </scg:List>
+                          </ui:SelectItem.Items>
+                          <ui:SelectItem.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="61ca151710e330fcf7349d389df24e93" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl tag='SELECT' id='_astype_select' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:SelectItem.Target>
+                        </ui:SelectItem>
+                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into- Institution name" EmptyField="False" sap:VirtualizedContainerService.HintSize="863.2,134" sap2010:WorkflowViewState.IdRef="TypeInto_3" SendWindowMessages="False" SimulateType="False" Text="[Assetrow.Item(&quot;InstitutionName&quot;).ToString]">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="3cd86004be626bf245218e4fe8188e84" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl id='_inname' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:TypeInto.Target>
+                        </ui:TypeInto>
+                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into - Asset value" EmptyField="False" sap:VirtualizedContainerService.HintSize="863.2,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[Assetrow.Item(&quot;Asset&quot;).ToString]">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="04d8863b9fa2e75e10f8b47ce115bb3c" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl id='_mkvalue$amt' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:TypeInto.Target>
+                        </ui:TypeInto>
+                        <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayMS="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Type Into- Available Usage Value" EmptyField="False" sap:VirtualizedContainerService.HintSize="863.2,134" sap2010:WorkflowViewState.IdRef="TypeInto_2" SendWindowMessages="False" SimulateType="True" Text="[Assetrow.Item(&quot;Asset&quot;).ToString]">
+                          <ui:TypeInto.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="9e266d5be0e346fb68d2d07b1d62b648" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl id='_ausage$amt' tag='INPUT' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:TypeInto.Target>
+                        </ui:TypeInto>
+                        <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="863.2,52.4" sap2010:WorkflowViewState.IdRef="CommentOut_1">
+                          <ui:CommentOut.Body>
+                            <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="336,376" sap2010:WorkflowViewState.IdRef="Sequence_26">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - CANCEL [TESTING]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                <ui:Click.CursorPosition>
+                                  <ui:CursorPosition Position="Center">
+                                    <ui:CursorPosition.OffsetX>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetX>
+                                    <ui:CursorPosition.OffsetY>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetY>
+                                  </ui:CursorPosition>
+                                </ui:Click.CursorPosition>
+                                <ui:Click.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="50f74c88c670efaed7fcb3d212e6c9a2" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl id='_cncl' tag='BUTTON' /&gt;" WaitForReady="COMPLETE" />
+                                </ui:Click.Target>
+                              </ui:Click>
+                              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="Enable for TESTING" ClickType="CLICK_SINGLE" DisplayName="Click: OK to cancel the form data " sap:VirtualizedContainerService.HintSize="314,80.8" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                <ui:Click.CursorPosition>
+                                  <ui:CursorPosition Position="Center">
+                                    <ui:CursorPosition.OffsetX>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetX>
+                                    <ui:CursorPosition.OffsetY>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetY>
+                                  </ui:CursorPosition>
+                                </ui:Click.CursorPosition>
+                                <ui:Click.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb30314672198f9bd34536dc9248976c" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;ctrl role='dialog' /&gt;&lt;ctrl name='OK' /&gt;" WaitForReady="COMPLETE" />
+                                </ui:Click.Target>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                              </ui:Click>
+                            </Sequence>
+                          </ui:CommentOut.Body>
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                        </ui:CommentOut>
+                        <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - Submit Asset" sap:VirtualizedContainerService.HintSize="863.2,106" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                          <ui:Click.CursorPosition>
+                            <ui:CursorPosition Position="Center">
+                              <ui:CursorPosition.OffsetX>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetX>
+                              <ui:CursorPosition.OffsetY>
+                                <InArgument x:TypeArguments="x:Int32" />
+                              </ui:CursorPosition.OffsetY>
+                            </ui:CursorPosition>
+                          </ui:Click.CursorPosition>
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="ace4ae2980cb79c1abc2b86758b7da6c" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl id='_submit' tag='BUTTON' aaname='Submit' /&gt;" WaitForReady="INTERACTIVE" />
+                          </ui:Click.Target>
+                        </ui:Click>
+                        <Pick sap2010:Annotation.AnnotationText="Success message /System error" DisplayName="Pick- Asset details added successfully" sap:VirtualizedContainerService.HintSize="863.2,972" sap2010:WorkflowViewState.IdRef="Pick_5">
+                          <sap:WorkflowViewStateService.ViewState>
+                            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                              <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                              <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                            </scg:Dictionary>
+                          </sap:WorkflowViewStateService.ViewState>
+                          <PickBranch DisplayName="PickBranch- Business rule exception" sap:VirtualizedContainerService.HintSize="365.6,897.6" sap2010:WorkflowViewState.IdRef="PickBranch_9">
+                            <PickBranch.Trigger>
+                              <Delay DisplayName="Delay- Medium" Duration="[TimeSpan.Parse(in_Config(&quot;DelayMedium&quot;).ToString)]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Delay_5" />
+                            </PickBranch.Trigger>
+                            <Sequence DisplayName="Unknown exception" sap:VirtualizedContainerService.HintSize="336,637.6" sap2010:WorkflowViewState.IdRef="Sequence_27">
+                              <sap:WorkflowViewStateService.ViewState>
+                                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                </scg:Dictionary>
+                              </sap:WorkflowViewStateService.ViewState>
+                              <Assign DisplayName="Assign- BR error" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_16">
+                                <Assign.To>
+                                  <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                                </Assign.To>
+                                <Assign.Value>
+                                  <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("Cannot add applicant asset details.")]</InArgument>
+                                </Assign.Value>
+                              </Assign>
+                              <ui:LogMessage DisplayName="Log Message- System Error" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_14" Level="Error" Message="[out_BusinessRuleException.Message]" />
+                              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click - CANCEL [TESTING]" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="Click_5" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                                <ui:Click.CursorPosition>
+                                  <ui:CursorPosition Position="Center">
+                                    <ui:CursorPosition.OffsetX>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetX>
+                                    <ui:CursorPosition.OffsetY>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetY>
+                                  </ui:CursorPosition>
+                                </ui:Click.CursorPosition>
+                                <ui:Click.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="af2596d9628925d9939939d311cbd221" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_6' tag='IFRAME' /&gt;&lt;webctrl id='_cancel' tag='BUTTON' aaname='Cancel' /&gt;" WaitForReady="COMPLETE" />
+                                </ui:Click.Target>
+                              </ui:Click>
+                              <ui:Click DelayBefore="{x:Null}" DelayMS="{x:Null}" sap2010:Annotation.AnnotationText="Enable for TESTING" ClickType="CLICK_SINGLE" DisplayName="Click: OK to cancel the form data " sap:VirtualizedContainerService.HintSize="314,134.4" sap2010:WorkflowViewState.IdRef="Click_6" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="False">
+                                <ui:Click.CursorPosition>
+                                  <ui:CursorPosition Position="Center">
+                                    <ui:CursorPosition.OffsetX>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetX>
+                                    <ui:CursorPosition.OffsetY>
+                                      <InArgument x:TypeArguments="x:Int32" />
+                                    </ui:CursorPosition.OffsetY>
+                                  </ui:CursorPosition>
+                                </ui:Click.CursorPosition>
+                                <ui:Click.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="fb30314672198f9bd34536dc9248976c" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;ctrl role='dialog' /&gt;&lt;ctrl name='OK' /&gt;" WaitForReady="COMPLETE" />
+                                </ui:Click.Target>
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                              </ui:Click>
+                            </Sequence>
+                          </PickBranch>
+                          <PickBranch DisplayName="PickBranch- Successfully added asset details" sap:VirtualizedContainerService.HintSize="343.6,897.6" sap2010:WorkflowViewState.IdRef="PickBranch_10">
+                            <PickBranch.Trigger>
+                              <ui:UiElementExists Exists="{x:Null}" DisplayName="Element Exists- Asset added success message" sap:VirtualizedContainerService.HintSize="314,106" sap2010:WorkflowViewState.IdRef="UiElementExists_6">
+                                <ui:UiElementExists.Target>
+                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" InformativeScreenshot="74be8e8ec2af68cc1ca79c9cbf86229d" Selector="&lt;html app='chrome.exe' title='Finacle Universal Banking Solution' /&gt;&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;&lt;webctrl id='_sucmsg_paraMsg' tag='P' aaname='Asset Details Created successfully.' /&gt;" TimeoutMS="[Convert.ToInt32(in_Config(&quot;TimeoutMedium&quot;).ToString)]" WaitForReady="COMPLETE" />
+                                </ui:UiElementExists.Target>
+                              </ui:UiElementExists>
+                            </PickBranch.Trigger>
+                            <ui:LogMessage DisplayName="Log Message- Successfully added asset details" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_15" Level="Info" Message="[&quot;Application Id:&quot;+in_LoanAppNumber+&quot;, successfully added asset details.&quot;]" />
+                          </PickBranch>
+                        </Pick>
+                      </Sequence>
+                    </Sequence>
+                  </ActivityAction>
+                </ui:ForEachRow.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ForEachRow>
+            </Sequence>
+          </FlowStep>
+        </FlowDecision.True>
+        <FlowDecision.False>
+          <FlowStep x:Name="__ReferenceID5">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <av:Point x:Key="ShapeLocation">360,263.8</av:Point>
+                <av:Size x:Key="ShapeSize">200,97.2</av:Size>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <Sequence sap2010:Annotation.AnnotationText="Asset details pre-exist in the table." DisplayName="Asset details pre exist" sap:VirtualizedContainerService.HintSize="336,466.4" sap2010:WorkflowViewState.IdRef="Sequence_18">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:LogMessage DisplayName="Log Message- Asset details pre-exist" sap:VirtualizedContainerService.HintSize="314,93.6" sap2010:WorkflowViewState.IdRef="LogMessage_16" Level="Info" Message="[&quot;Existing member, enter asset details manually.&quot;]" />
+              <Assign DisplayName="Assign- BR exception" sap:VirtualizedContainerService.HintSize="314,59.6" sap2010:WorkflowViewState.IdRef="Assign_17">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="ui:BusinessRuleException">[out_BusinessRuleException]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="ui:BusinessRuleException">[New BusinessRuleException("enter asset details manually")]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <ui:CommentOut sap2010:Annotation.AnnotationText="Extract asset table" DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="314,80.8" sap2010:WorkflowViewState.IdRef="CommentOut_2">
+                <ui:CommentOut.Body>
+                  <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="336,211.2" sap2010:WorkflowViewState.IdRef="Sequence_30">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke InjectJs to CreateTable workflow" sap:VirtualizedContainerService.HintSize="314,87.2" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="ProcessLayer\InjectJsToCreateTable.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <OutArgument x:TypeArguments="sd:DataTable" x:Key="out_DT_Records">[DT_AssetTable]</OutArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_FindElementTableSelector">&lt;webctrl name='loginFrame' tag='IFRAME' /&gt;&lt;webctrl name='CRM_CORE' tag='IFRAME' /&gt;&lt;webctrl name='HTMLDataFrm' tag='FRAME' /&gt;&lt;webctrl name='formArea' tag='IFRAME' /&gt;&lt;webctrl id='Frame_5' tag='IFRAME' /&gt;</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_FinacleTableObject">ucObj._appl.tempDPObj</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_FinacleContainerLocation">_finDGrid1_gridContents</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_FinacleTableID">AssetTable</InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_FinacleFrameLocation">window.top.loginFrame.CRM_CORE.HTMLDataFrm.formArea.Frame_5</InArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                    </ui:InvokeWorkflowFile>
+                  </Sequence>
+                </ui:CommentOut.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:CommentOut>
+            </Sequence>
+          </FlowStep>
+        </FlowDecision.False>
+      </FlowDecision>
+      <x:Reference>__ReferenceID5</x:Reference>
+      <x:Reference>__ReferenceID6</x:Reference>
+    </Flowchart>
+    <Sequence DisplayName="Disconnect DB" sap:VirtualizedContainerService.HintSize="614,52.4" sap2010:WorkflowViewState.IdRef="Sequence_11">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:DatabaseDisconnect DatabaseConnection="[DBConnection]" DisplayName="Disconnect- DB connection" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="DatabaseDisconnect_1" />
+    </Sequence>
+  </Sequence>
+</Activity>
